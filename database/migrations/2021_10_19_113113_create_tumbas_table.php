@@ -23,7 +23,7 @@ class CreateTumbasTable extends Migration
             $table->string('ap_paterno');
             $table->string('ap_materno');
             $table->string('fecha_deceso');
-            $table->string('imagen');
+            $table->string('imagen')->nullable(true);
             $table->text('obs');
             $table->timestamps();
         });
