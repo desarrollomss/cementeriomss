@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCuartelesInfoTable extends Migration
+class CreateCNivelesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateCuartelesInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('cuarteles_info', function (Blueprint $table) {
-            $table->string('cod');
-            $table->string('descripcion');
+        Schema::create('c_niveles', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('codigo',1);
+            $table->string('descripcion',50)->nullable(false);
+            $table->timestamps();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateCuartelesInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cuarteles_info');
+        Schema::dropIfExists('c_niveles');
     }
 }

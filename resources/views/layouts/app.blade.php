@@ -18,7 +18,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
-
 @yield('page_css')
 <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
@@ -33,7 +32,7 @@
             <div class="navbar-bg bg-success"></div>
             <nav class="navbar navbar-expand-lg main-navbar bg-success">
                 @include('layouts.header')
-                
+
             </nav>
             <div class="main-sidebar main-sidebar-postion">
                 @include('layouts.sidebar')
@@ -42,12 +41,9 @@
             <div class="main-content">
                 @yield('content')
             </div>
-            {{-- <footer class="main-footer">
-                @include('layouts.footer')
-            </footer> --}}
         </div>
     </div>
-    
+
     @include('profile.change_password')
     @include('profile.edit_profile')
 </body>
@@ -67,15 +63,17 @@
 <script src="{{ asset(mix('assets/js/custom/custom.js')) }}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
 
 @yield('page_js')
 @yield('scripts')
 
-<script>
+<!-- <script>
     let loggedInUser =@json(\Illuminate\Support\Facades\Auth::user());
     let loginUrl = '{{ route('login') }}';
     // Loading button plugin (removed from BS4)
@@ -89,5 +87,5 @@
             }
         };
     }(jQuery));
-</script>
+</script> -->
 </html>

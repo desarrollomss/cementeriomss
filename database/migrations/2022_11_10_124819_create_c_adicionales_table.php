@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateObservacionesTable extends Migration
+class CreateCAdicionalesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateObservacionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('observaciones', function (Blueprint $table) {
-            $table->string('observaciones');
+        Schema::create('c_adicionales', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('descripcion',50)->nullable(false);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +27,6 @@ class CreateObservacionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('observaciones');
+        Schema::dropIfExists('c_adicionales');
     }
 }

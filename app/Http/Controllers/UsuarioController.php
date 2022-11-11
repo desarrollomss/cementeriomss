@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
@@ -12,43 +11,30 @@ use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
+use Auth;
+
 class UsuarioController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:ver-users|crear-users|editar-users|borrar-users', ['only'=>['index']]);
-        $this->middleware('permission:crear-users', ['only'=>['create','store']]);
-        $this->middleware('permission:editar-users', ['only'=>['edit','update']]);
-        $this->middleware('permission:borrar-users', ['only'=>['destroy']]);
+        $this->middleware('permission:VER-USUARIOS|CREAR-USUARIOS|EDITAR-USUARIOS|BORRAR-USUARIOS', ['only'=>['index']]);
+        $this->middleware('permission:CREAR-USUARIOS', ['only'=>['create','store']]);
+        $this->middleware('permission:EDITAR-USUARIOS', ['only'=>['edit','update']]);
+        $this->middleware('permission:BORRAR-USUARIOS', ['only'=>['destroy']]);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $usuarios = User::all();
         return view('usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
         return view('usuarios.crear', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -65,23 +51,11 @@ class UsuarioController extends Controller
         return redirect()->route('usuarios.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $user = User::find($id);
@@ -90,44 +64,31 @@ class UsuarioController extends Controller
         return view('usuarios.editar', compact('user','roles','userRol'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
+        $this->validate($request,[
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:password_confirmation',
             'roles' => 'required'
         ]);
-    
+
         $input = $request->all();
-        if(!empty($input['password'])){ 
-            $input['confirm-password'] = Hash::make($input['password']);
+
+        if(!empty($input['password'])){
+            $input['password'] = Hash::make($input['password']);
         }else{
-            $input = Arr::except($input,array('password'));    
+            $input = Arr::except($input, array('password'));
         }
-    
+
         $user = User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
-    
+
         $user->assignRole($request->input('roles'));
-    
         return redirect()->route('usuarios.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         User::find($id)->delete();

@@ -15,17 +15,14 @@
                                     <div class="card shadow p-3 mb-5 bg-success rounded ">
                                         <div class="card-content">
                                             <div class="card-body">
-                                                @php
-                                                    use App\Models\Cuarteles;
-                                                    $cuenta = Cuarteles::count();
-                                                @endphp
+
                                                 <div class="media d-flex">
                                                     <div class="align-self-center">
                                                         <i class="fas fa-hospital-alt font-large-2 float-left"
                                                             style="font-size:35px"></i>
                                                     </div>
                                                     <div class="media-body text-right">
-                                                        <h1>{{ $cuenta }}</h1>
+
                                                         <a href="cuarteles" class="text-white">Cuarteles</a>
                                                     </div>
                                                 </div>
@@ -37,17 +34,14 @@
                                     <div class="card shadow p-3 mb-5 bg-warning rounded">
                                         <div class="card-content">
                                             <div class="card-body">
-                                                @php
-                                                    use App\Models\Mausoleos;
-                                                    $cuenta = Mausoleos::count();
-                                                @endphp
+
                                                 <div class="media d-flex">
                                                     <div class="align-self-center">
                                                         <i class="fas fa-clinic-medical font-large-2 float-left"
                                                             style="font-size:35px"></i>
                                                     </div>
                                                     <div class="media-body text-right">
-                                                        <h1>{{ $cuenta }}</h1>
+
                                                         <a href="mausoleos" class="text-white">Mausoleos</a>
                                                     </div>
                                                 </div>
@@ -59,17 +53,14 @@
                                     <div class="card shadow p-3 mb-5 bg-info rounded">
                                         <div class="card-content">
                                             <div class="card-body">
-                                                @php
-                                                    use App\Models\Tumbas;
-                                                    $cuenta = Tumbas::count();
-                                                @endphp
+
                                                 <div class="media d-flex">
                                                     <div class="align-self-center">
                                                         <i class="fas fa-cross font-large-2 float-left"
                                                             style="font-size:35px"></i>
                                                     </div>
                                                     <div class="media-body text-right">
-                                                        <h1>{{ $cuenta }}</h1>
+
                                                         <a href="tumbas" class="text-white">Tumbas</a>
                                                     </div>
                                                 </div>

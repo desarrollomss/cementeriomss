@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNivelesTumbasTable extends Migration
+class CreateCObservacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateNivelesTumbasTable extends Migration
      */
     public function up()
     {
-        Schema::create('niveles_tumbas', function (Blueprint $table) {
-            $table->string('descripcion');
+        Schema::create('c_observaciones', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('descripcion',50)->nullable(false);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +27,6 @@ class CreateNivelesTumbasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('niveles_tumbas');
+        Schema::dropIfExists('c_observaciones');
     }
 }

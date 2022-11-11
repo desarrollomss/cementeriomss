@@ -25,7 +25,7 @@
         <i class="fas fa-hospital-alt"></i><span>Cuarteles</span>
     </a>
 </li>
-<li class="side-menus {{ Request::is('mausoleos') ? 'active' : '' }}">
+<!-- <li class="side-menus {{ Request::is('mausoleos') ? 'active' : '' }}">
     <a class="nav-link" href="{{url('/mausoleos')}}">
         <i class="fas fa-clinic-medical"></i><span>Mausoleos</span>
     </a>
@@ -34,6 +34,6 @@
     <a class="nav-link" href="{{url('/tumbas')}}">
         <i class="fas fa-cross"></i><span>Tumbas</span>
     </a>
-</li>
+</li> -->
 @endcan
 
