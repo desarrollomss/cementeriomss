@@ -17,7 +17,6 @@ class CreateRegistrosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_tipo_reg');
             $table->foreign('id_tipo_reg')->references('id')->on('c_tipo_registros');
-            $table->string('codigo',10)->nullable();
             $table->unsignedBigInteger('id_nivel');
             $table->foreign('id_nivel')->references('id')->on('c_niveles');
             $table->integer('numero')->nullable(true);
