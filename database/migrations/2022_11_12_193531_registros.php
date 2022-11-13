@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistrosTable extends Migration
+class Registros extends Migration
 {
     /**
      * Run the migrations.
@@ -19,6 +19,8 @@ class CreateRegistrosTable extends Migration
             $table->foreign('id_tipo_reg')->references('id')->on('c_tipo_registros');
             $table->unsignedBigInteger('id_nivel');
             $table->foreign('id_nivel')->references('id')->on('c_niveles');
+            $table->unsignedBigInteger('id_ubicacion');
+            $table->foreign('id_ubicacion')->references('id')->on('c_ubicaciones');
             $table->integer('numero')->nullable(true);
             $table->string('nombres')->nullable(true);
             $table->string('paterno')->nullable(true);
