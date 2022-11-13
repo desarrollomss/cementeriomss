@@ -6,14 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 class RegistrosObservaciones extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('c_registros_observaciones', function(Blueprint $table){
+        Schema::create('registros_observaciones', function(Blueprint $table){
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_registros');
             $table->foreign('id_registros')->references('id')->on('registros');
@@ -23,13 +18,8 @@ class RegistrosObservaciones extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('c_registros_observaciones');
+        Schema::dropIfExists('registros_observaciones');
     }
 }
