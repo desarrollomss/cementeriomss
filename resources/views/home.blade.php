@@ -60,8 +60,14 @@
                                                             style="font-size:35px"></i>
                                                     </div>
                                                     <div class="media-body text-right">
-
-                                                        <a href="tumbas" class="text-white">Tumbas</a>
+                                                        @php
+                                                            use App\Models\Registros;
+                                                            $contTumbas = Registros::where('id_tipo_reg',3)->count();
+                                                        @endphp
+                                                        <a href="{{route('tumbas.index')}}" class="text-white text-decoration-none">
+                                                            <h1>{{$contTumbas}}</h1>
+                                                            Tumbas
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>

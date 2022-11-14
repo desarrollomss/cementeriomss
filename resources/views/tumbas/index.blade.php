@@ -1,153 +1,169 @@
 @extends('layouts.app')
-
 @section('content')
-    <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">Registros de Tumbas</h3>
-        </div>
-        <div class="section-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    @can('crear-registers')
-                                        <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}"><em
-                                                class="fas fa-check-square"></em> Nuevo registro</a>
-                                    @endcan
-                                </div>
-                                <div class="col">
-                                    <a class="btn btn-primary mb-3" href="{{ route('exportarTumbas') }}">Exportar a
-                                        Excel</a>
-                                </div>
-                                <form action="{{ route('tumbas.index') }}" class="mr-3" method="GET">
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <input type="text" class="form-control" name="texto" placeholder="Buscar..."
-                                                value="{{ $texto }}" onkeyup="mayus(this);">
-                                        </div>
-                                        <div class="col">
-                                            <input type="submit" class="btn btn-warning mt-1" value="Buscar">
-                                            <a href="{{ route('tumbas.index') }}" class="btn btn-info mt-1">Limpiar</a>
-                                        </div>
-                                    </div>
-                                </form>
+<section class="section">
+    <div class="section-header">
+        <h3 class="page__heading">Listado de Tumbas</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                @can('crear-registers')
+                                <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}"><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                @endcan
                             </div>
-                            <table class="table table-responsive table-hover table-striped mt-2">
-                                <thead class="bg-success">
-                                    <th style="color: #fff">Codigo</th>
-                                    <th style="color: #fff">Ubicación</th>
-                                    <th style="color: #fff">Nivel</th>
-                                    <th style="color: #fff">Nro</th>
-                                    <th style="color: #fff">Nombres</th>
-                                    <th style="color: #fff">A. Paterno</th>
-                                    <th style="color: #fff">A. Materno</th>
-                                    <th style="color: #fff">Fecha Deceso</th>
-                                    <th style="color: #fff">Observ</th>
-                                    @can('ver-registers')
-                                        <th style="color: #fff">Ver</th>
-                                    @endcan
-                                    @can('editar-registers')
-                                        <th style="color: #fff">Editar</th>
-                                    @endcan
-                                    @can('borrar-registers')
-                                        <th style="color: #fff">Eliminar</th>
-                                    @endcan
-                                </thead>
-                                <tbody>         
-                                        @foreach ($tumbas as $tumba)
-                                            <tr>
-                                                <td>{{ $tumba->codigo }}</td>
-                                                <td>{{ $tumba->ubicacion }}</td>
-                                                <td>{{ $tumba->nivel }}</td>
-                                                <td>{{ $tumba->numero }}</td>
-                                                <td>{{ $tumba->nombres }}</td>
-                                                <td>{{ $tumba->ap_paterno }}</td>
-                                                <td>{{ $tumba->ap_materno }}</td>
-                                                <td>{{ $tumba->fecha_deceso }}</td>
-                                                <td>{{ $tumba->obs }}</td>
-                                                <td width="280px">
-                                                    @can('ver-registers')
-                                                        <a class="btn btn-success"
-                                                            href="{{ route('tumbas.show', $tumba->id) }}">
-                                                            <em class="fas fa-eye"></em>
-                                                        </a>
-                                                    @endcan
-                                                </td>
-                                                <td width="280px">
-                                                    @can('editar-registers')
-                                                        <a class="btn btn-info"
-                                                            href="{{ route('tumbas.edit', $tumba->id) }}"><i
-                                                                class="fas fa-user-edit"></i></a>
-                                                    @endcan
-                                                </td>
-                                                <td width="280px">
-                                                    @can('borrar-registers')
-                                                        <form action="{{ route('tumbas.destroy', $tumba->id) }}"
-                                                            method="POST" style="display:inline" class="frmDelete">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger text-light"><i
-                                                                    class="fas fa-user-slash"></i></button>
-                                                        </form>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                </tbody>
-                            </table>
-                            <table class="table table-responsive mt-2 d-flex justify-content">
-                                <td colspan="8">
-                                    {{ $tumbas->appends(['texto' => $texto])->links() }}
-                                </td>
-                            </table>
                         </div>
+                        <table class="table table-responsive table-hover table-striped mt-2" id="tumbas">
+                            <thead class="bg-success">
+                                <th style="color: #fff">Codigo</th>
+                                <th style="color: #fff">Ubicación</th>
+                                <th style="color: #fff">Nivel</th>
+                                <th style="color: #fff">Nro</th>
+                                <th style="color: #fff">Nombres</th>
+                                <th style="color: #fff">A.Paterno</th>
+                                <th style="color: #fff">A.Materno</th>
+                                <th style="color: #fff">Fecha Deceso</th>
+                                <th style="color: #fff">Observ</th>
+                                @can('ver-registers')
+                                <th style="color: #fff" colspan="3">Acciones</th>
+                                @endcan
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+@include('tumbas.deta_modal')
 @endsection
 @section('scripts')
 
-    <script>
-        $('.frmDelete').submit(function(e) {
-            e.preventDefault();
-            swal({
-                    title: 'Seguro de eliminar?',
-                    text: "Si eliminas este registro no podrás recuperarlo",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttons: true,
-                    buttons: {
-                        cancel: 'No, eliminar',
-                        confirm: "Si, Eliminar",
-                    },
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        this.submit();
-                        swal("El registro se elimino de la base de datos", {
-                            icon: "success",
-                        });
-                    }
-                });
-        });
-        $(document).ready(function(e) {
-            $('#imagen').change(function() {
-                let reader = new FileReader();
-                reader.onload = (e) => {
-                    $('#imagenSeleccionada').attr('src', e.target.result);
+<script>
+    $('#frmDelete').submit(function(e) {
+        e.preventDefault();
+        swal({
+                title: 'Seguro de eliminar?',
+                text: "Si eliminas este registro no podrás recuperarlo",
+                icon: "warning",
+                showCancelButton: true,
+                buttons: true,
+                buttons: {
+                    cancel: 'No, eliminar',
+                    confirm: "Si, Eliminar",
+                },
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    this.submit();
+                    swal("El registro se elimino de la base de datos", {
+                        icon: "success",
+                    });
                 }
-                reader.readAsDataURL(this.files[0]);
             });
+    });
+    $(document).ready(function(e) {
+        $('#imagen').change(function() {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('#imagenSeleccionada').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
         });
+    });
 
-        function mayus(e) {
-            e.value = e.value.toUpperCase();
-        }
-    </script>
+    function mayus(e) {
+        e.value = e.value.toUpperCase();
+    }
+
+
+    $(document).ready(function() {
+        $('#tumbas').DataTable({
+            proccesing: true,
+            info: true,
+            "order": [
+                [0, "asc"]
+            ],
+            responsive: true,
+            autoWidth: false,
+            processing: true,
+            info: true,
+            "pageLength": 50,
+            "aLengthMenu": [
+                [50, 100, 150, 200, 250, -1],
+                [50, 100, 150, 200, 250, "Todos"]
+            ],
+            "ajax": "{{route('obtener.tumbas')}}",
+            "columns": [
+                {data: 'codigo'},
+                {data: 'ubicacion'},
+                {data: 'nivel'},
+                {data: 'numero'},
+                {data: 'nombres'},
+                {data: 'paterno'},
+                {data: 'materno'},
+                {data: 'fecha_deceso'},
+                {data: 'observaciones'},
+                {data: 'ver'},
+                {data: 'editar'},
+                {data: 'borrar'}
+
+            ],
+            "language": {
+                "lengthMenu": "Mostrar " +
+                    `<select class="custom-select custom-select-sm form-control form-control-sm">
+                            <option value='50'>50</option>
+                            <option value='100'>100</option>
+                            <option value='150'>150</option>
+                            <option value='200'>200</option>
+                            <option value='250'>250</option>
+                            <option value='-1'>Todos</option>
+                        </select>` +
+                    " registros por página",
+                "zeroRecords": "Sin Resultados Actualmente",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Sin Resultados",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar: ",
+                "paginate": {
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        });
+    });
+
+    $(document).on('click','#modalTumbasDeta', function(){
+        var id = $(this).data('id');
+        $.get('<?= route("detalle.tumbas") ?>',{id:id}, function (data) {
+            $('.tumbadetalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
+            $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
+            $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
+            $('.tumbadetalle').find('input[name="observaciones"]').val(data.detalle[0].observacion);
+            if(data.ff == null)
+            {
+                $('.tumbadetalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
+            }
+            else{
+                $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.ff);
+            }
+
+            if(data.detalle[0].imagen == null)
+            {
+                $('.tumbadetalle').find('input[name="imagen"]').val("SIN IMAGEN");
+            }
+            else{
+                $('.tumbadetalle').find('input[name="imagen"]').val(data.detalle[0].imagen);
+            }
+            $('.tumbadetalle').modal('show');
+         },'json');
+    });
+</script>
 
 @endsection

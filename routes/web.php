@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\CuartelesController;
+use App\Http\Controllers\TumbasController;
+use Faker\Guesser\Name;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware'=>['auth']],function () {
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
-    Route::get('/cuarteles',[CuartelesController::class, 'index'])->name('index.cuateles');
-    Route::get('obtenercuarteles', [CuartelesController::class, 'obtenercuarteles'])->name('obtener.cuarteles');
+    Route::get('/cementerio/registros/tumbas', [TumbasController::class, 'index'])->name('tumbas.index');
+    Route::get('obtenertumbas', [TumbasController::class, 'obtenertumbas'])->name('obtener.tumbas');
+    Route::get('/cementerio/registros/crear',[TumbasController::class, 'create'])->name('tumbas.create');
+    Route::get('detalletumbas',[TumbasController::class, 'detalletumbas'])->name('detalle.tumbas');
 });
