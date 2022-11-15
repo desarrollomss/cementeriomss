@@ -54,7 +54,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-2">
                                     <div class="form-group">
                                         <label for="codigo">Codigo</label>
-                                        <select class="form-control" name="codigo" id="codigo" required>
+                                        <select class="form-control" name="ubicacion" id="codigo" required>
                                             <option selected value="0" disabled>Seleccionar</option>
                                             @foreach ($ubicacion as $item)
                                             <option value="{{$item->id}}">{{$item->codigo}}</option>
@@ -147,11 +147,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                <div class="col-md-1 d-flex justify-content-start">
+                                    <button type="submit" class="btn btn-success my-2 btn-block">Guardar</button>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6 d-flex justify-content-end">
-                                    <a href="{{route('tumbas.index')}}" class="btn btn-danger" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
+                                <div class="col-xs-12 col-sm-12 col-md-1 d-flex justify-content-end">
+                                    <a href="{{route('tumbas.index')}}" class="btn btn-danger my-2 btn-block" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
                                 </div>
                             </div>
                         </form>

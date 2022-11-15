@@ -94,7 +94,7 @@ class TumbasController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'codigo'=>'required',
+            'ubicacion'=>'required',
             'nivel'=>'required',
             'numero'=>'required',
             'nombres'=>'required',

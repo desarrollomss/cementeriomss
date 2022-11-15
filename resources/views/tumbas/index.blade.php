@@ -47,7 +47,6 @@
     </div>
 </section>
 @include('tumbas.deta_modal')
-@include('tumbas.crear_modal')
 @endsection
 @section('scripts')
 
@@ -61,6 +60,8 @@
             reader.readAsDataURL(this.files[0]);
         });
     });
+
+
     $('#frmDelete').submit(function(e) {
         e.preventDefault();
         swal({
