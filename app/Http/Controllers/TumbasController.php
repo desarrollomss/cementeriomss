@@ -36,7 +36,7 @@ class TumbasController extends Controller
         ->join('c_observaciones as co', 'ro.id_observaciones', '=', 'co.id')
         ->where('cu.codigo', 'like', 'T-%')
         ->select('registros.id','cu.codigo','cu.descripcion as ubicacion','cn.descripcion as nivel','registros.numero','registros.nombres','registros.paterno','registros.materno','registros.fecha_deceso','registros.imagen','co.descripcion as observaciones')
-        ->orderBy('registros.id', 'DESC');
+        ->orderBy('registros.id', 'desc');
 
         return datatables()->of($query)
         ->addColumn('fecha_deceso', function($row)
