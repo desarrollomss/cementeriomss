@@ -18,13 +18,13 @@
                         </div>
                         <table class="table table-responsive table-hover table-striped mt-2" id="tumbas">
                             <thead class="bg-success">
-                                <th style="color: #fff">Codigo</th>
-                                <th style="color: #fff">Ubicación</th>
-                                <th style="color: #fff">Nivel</th>
-                                <th style="color: #fff">Nro</th>
                                 <th style="color: #fff">Nombres</th>
                                 <th style="color: #fff">A.Paterno</th>
                                 <th style="color: #fff">A.Materno</th>
+                                <th style="color: #fff">Codigo</th>
+                                <th style="color: #fff">Nivel</th>
+                                <th style="color: #fff">Nro</th>
+                                <th style="color: #fff">Ubicación</th>
                                 <th style="color: #fff">Fecha Deceso</th>
                                 <th style="color: #fff">Observ</th>
                                 @can('ver-registers')
@@ -109,18 +109,7 @@
                 [50, 100, 150, 200, 250, "Todos"]
             ],
             "ajax": "{{route('obtener.tumbas')}}",
-            "columns": [{
-                    data: 'codigo'
-                },
-                {
-                    data: 'ubicacion'
-                },
-                {
-                    data: 'nivel'
-                },
-                {
-                    data: 'numero'
-                },
+            "columns": [
                 {
                     data: 'nombres'
                 },
@@ -129,6 +118,18 @@
                 },
                 {
                     data: 'materno'
+                },
+                {
+                    data: 'codigo'
+                },
+                {
+                    data: 'nivel'
+                },
+                {
+                    data: 'numero'
+                },
+                {
+                    data: 'ubicacion'
                 },
                 {
                     data: 'fecha_deceso'

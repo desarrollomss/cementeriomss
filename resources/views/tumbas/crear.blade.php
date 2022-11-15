@@ -124,8 +124,8 @@
                                         <label for="observacion">Observaciones</label>
                                         @foreach ($observaciones as $obs)
                                         <div class="form-check">
-                                            <input class="form-check-input" name="observaciones[]" type="checkbox" value="{{$obs->id}}">
-                                            <label class="form-check-label">
+                                            <input class="form-check-input" id="obss{{ $obs->id }}" name="observaciones[]" type="checkbox" value="{{$obs->id}}">
+                                            <label class="form-check-label" for="obss{{ $obs->id }}">
                                                 {{ $obs->descripcion }}
                                             </label>
                                         </div>
@@ -137,8 +137,8 @@
                                         <label for="adicionales">Adicionales</label>
                                         @foreach ($adicionales as $ad)
                                         <div class="form-check">
-                                            <input class="form-check-input" name="adicionales[]" type="checkbox" value="{{$ad->id}}">
-                                            <label class="form-check-label">
+                                            <input class="form-check-input" id="add{{ $ad->id }}" name="adicionales[]" type="checkbox" value="{{$ad->id}}">
+                                            <label class="form-check-label" for="add{{ $ad->id }}">
                                                 {{ $ad->descripcion }}
                                             </label>
                                         </div>
