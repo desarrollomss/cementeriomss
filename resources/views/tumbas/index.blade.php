@@ -146,7 +146,7 @@
             $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
             $('.tumbadetalle').find('input[name="observaciones"]').val(data.detalle[0].observacion);
             $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.detalle[0].fecha_deceso);
-            $('.tumbadetalle').find('input[name="imagen"]').val(data.detalle[0].imagen);
+            $('.tumbadetalle').find("#imgdetalle").attr("src", data.detalle[0].imagen);
             $('.tumbadetalle').modal('show');
          },'json');
     });

@@ -84,8 +84,8 @@
                     </div>
                 </div>
 
-                <p class="titulos">Imagen </p>
-                <input type="text" name="imagen" readonly>
+                <!-- <input type="text" name="imagen" readonly id="imgdetalle"> -->
+                <img src="http://dummyimage.com/250x155/" id="imgdetalle" alt="Imagen" max="200" min="200">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-dismiss="modal">Cerra</button>
