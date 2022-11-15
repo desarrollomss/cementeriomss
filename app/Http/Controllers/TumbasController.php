@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registros;
-use Monolog\Registry;
+use App\Models\RegistrosObservaciones;
 
 class TumbasController extends Controller
 {
@@ -19,7 +19,11 @@ class TumbasController extends Controller
 
     public function index()
     {
-        return view('tumbas.index');
+        $observaciones = DB::table('c_observaciones')->get();
+        $niveles = DB::table('c_niveles')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo','like','T-%')->select('id','codigo','descripcion')->orderBy('codigo','asc')->get();
+        $adicionales = DB::table('c_adicionales')->get();
+        return view('tumbas.index',compact('observaciones','niveles','ubicacion','adicionales'));
     }
 
     public function obtenertumbas()
@@ -32,7 +36,7 @@ class TumbasController extends Controller
         ->join('c_observaciones as co', 'ro.id_observaciones', '=', 'co.id')
         ->where('cu.codigo', 'like', 'T-%')
         ->select('registros.id','cu.codigo','cu.descripcion as ubicacion','cn.descripcion as nivel','registros.numero','registros.nombres','registros.paterno','registros.materno','registros.fecha_deceso','registros.imagen','co.descripcion as observaciones')
-        ->orderBy('registros.id', 'ASC');
+        ->orderBy('registros.id', 'DESC');
 
         return datatables()->of($query)
         ->addColumn('fecha_deceso', function($row)
@@ -90,15 +94,15 @@ class TumbasController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'ubicacion'=>'required',
+            'codigo'=>'required',
             'nivel'=>'required',
             'numero'=>'required',
             'nombres'=>'required',
             'ap_paterno'=>'required',
             'ap_materno'=>'required',
-            'fecha_deceso'=>'required',
             'imagen'=>'image:jpeg,jpg,png|max:3072',
-            'obs'=>'required'
+            'observaciones'=>'required',
+            'adicionales'=>'required'
         ]);
 
         $registro = $request->all();
@@ -109,7 +113,11 @@ class TumbasController extends Controller
             $image->move($rutaGaurdada,$imgRegis);
             $registro['imagen'] = "$imgRegis";
         }
-        Registros::create($registro);
+        //  Registros::create($registro);
+
+        dd($registro);
+
+
         return redirect()->route('mausoleos.index');
     }
 

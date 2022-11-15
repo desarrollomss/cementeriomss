@@ -38,4 +38,5 @@ Route::group(['middleware'=>['auth']],function () {
     Route::get('obtenertumbas', [TumbasController::class, 'obtenertumbas'])->name('obtener.tumbas');
     Route::get('/cementerio/registros/crear',[TumbasController::class, 'create'])->name('tumbas.create');
     Route::get('detalletumbas',[TumbasController::class, 'detalletumbas'])->name('detalle.tumbas');
+    Route::post('/cementerio/registros/crear',[TumbasController::class, 'store'])->name('tumbas.store');
 });

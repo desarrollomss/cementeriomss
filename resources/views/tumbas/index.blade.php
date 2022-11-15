@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col">
                                 @can('crear-registers')
-                                <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}"><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                    <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}" ><em class="fas fa-check-square"></em> Nuevo registro</a>
                                 @endcan
                             </div>
                         </div>
@@ -28,7 +28,13 @@
                                 <th style="color: #fff">Fecha Deceso</th>
                                 <th style="color: #fff">Observ</th>
                                 @can('ver-registers')
-                                <th style="color: #fff" colspan="3">Acciones</th>
+                                <th style="color: #fff">Ver</th>
+                                @endcan
+                                @can('editar-registers')
+                                <th style="color: #fff">Editar</th>
+                                @endcan
+                                @can('borrar-registers')
+                                <th style="color: #fff">Borrar</th>
                                 @endcan
                             </thead>
                             <tbody>
@@ -41,10 +47,20 @@
     </div>
 </section>
 @include('tumbas.deta_modal')
+@include('tumbas.crear_modal')
 @endsection
 @section('scripts')
 
 <script>
+    $(document).ready(function(e) {
+        $('#imagen').change(function() {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('#imagenSeleccionada').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
     $('#frmDelete').submit(function(e) {
         e.preventDefault();
         swal({
@@ -68,15 +84,7 @@
                 }
             });
     });
-    $(document).ready(function(e) {
-        $('#imagen').change(function() {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                $('#imagenSeleccionada').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-        });
-    });
+
 
     function mayus(e) {
         e.value = e.value.toUpperCase();
@@ -100,19 +108,42 @@
                 [50, 100, 150, 200, 250, "Todos"]
             ],
             "ajax": "{{route('obtener.tumbas')}}",
-            "columns": [
-                {data: 'codigo'},
-                {data: 'ubicacion'},
-                {data: 'nivel'},
-                {data: 'numero'},
-                {data: 'nombres'},
-                {data: 'paterno'},
-                {data: 'materno'},
-                {data: 'fecha_deceso'},
-                {data: 'observaciones'},
-                {data: 'ver'},
-                {data: 'editar'},
-                {data: 'borrar'}
+            "columns": [{
+                    data: 'codigo'
+                },
+                {
+                    data: 'ubicacion'
+                },
+                {
+                    data: 'nivel'
+                },
+                {
+                    data: 'numero'
+                },
+                {
+                    data: 'nombres'
+                },
+                {
+                    data: 'paterno'
+                },
+                {
+                    data: 'materno'
+                },
+                {
+                    data: 'fecha_deceso'
+                },
+                {
+                    data: 'observaciones'
+                },
+                {
+                    data: 'ver'
+                },
+                {
+                    data: 'editar'
+                },
+                {
+                    data: 'borrar'
+                }
             ],
             "language": {
                 "lengthMenu": "Mostrar " +
@@ -138,17 +169,30 @@
         });
     });
 
-    $(document).on('click','#modalTumbasDeta', function(){
+    $(document).on('click', '#modalTumbasDeta', function() {
         var id = $(this).data('id');
-        $.get('<?= route("detalle.tumbas") ?>',{id:id}, function (data) {
+        var imgdefault = "{{asset('/imagen/default.png')}}";
+        $.get('<?= route("detalle.tumbas") ?>', {
+            id: id
+        }, function(data) {
             $('.tumbadetalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
             $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
             $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
             $('.tumbadetalle').find('input[name="observaciones"]').val(data.detalle[0].observacion);
             $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.detalle[0].fecha_deceso);
-            $('.tumbadetalle').find("#imgdetalle").attr("src", data.detalle[0].imagen);
+
+
+            let imgdeta = data.detalle[0].imagen;
+            let imagen_uri = "{{ asset('imagen/{img}') }}";
+            imagen_uri = imagen_uri.replace('{img}', imgdeta);
+
+            if (data.detalle[0].imagen == '') {
+                $('.tumbadetalle').find("#imgdetalle").attr("src", `${imgdefault}`);
+            } else {
+                $('.tumbadetalle').find("#imgdetalle").attr("src", `${imagen_uri}`);
+            }
             $('.tumbadetalle').modal('show');
-         },'json');
+        }, 'json');
     });
 </script>
 

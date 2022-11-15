@@ -49,12 +49,13 @@
                         @endif
                         <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" value="3" name="tiporegistro">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-2">
                                     <div class="form-group">
                                         <label for="codigo">Codigo</label>
-                                        <select class="form-control" id="codigo" required>
-                                            <option selected value="0">Seleccionar</option>
+                                        <select class="form-control" name="codigo" id="codigo" required>
+                                            <option selected value="0" disabled>Seleccionar</option>
                                             @foreach ($ubicacion as $item)
                                             <option value="{{$item->id}}">{{$item->codigo}}</option>
                                             @endforeach
@@ -64,8 +65,8 @@
                                 <div class="col-xs-12 col-sm-12 col-md-3">
                                     <div class="form-group">
                                         <label for="nivel">Nivel</label>
-                                        <select class="form-control" id="nivel" required>
-                                            <option selected value="0">Seleccionar</option>
+                                        <select class="form-control" name="nivel" id="nivel" required>
+                                            <option selected value="0" disabled>Seleccionar</option>
                                             @foreach ($niveles as $item)
                                             <option value="{{$item->id}}">{{$item->descripcion}}</option>
                                             @endforeach
@@ -123,7 +124,7 @@
                                         <label for="observacion">Observaciones</label>
                                         @foreach ($observaciones as $obs)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{$obs->id}}">
+                                            <input class="form-check-input" name="observaciones[]" type="checkbox" value="{{$obs->id}}">
                                             <label class="form-check-label">
                                                 {{ $obs->descripcion }}
                                             </label>
@@ -136,7 +137,7 @@
                                         <label for="adicionales">Adicionales</label>
                                         @foreach ($adicionales as $ad)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{$ad->id}}">
+                                            <input class="form-check-input" name="adicionales[]" type="checkbox" value="{{$ad->id}}">
                                             <label class="form-check-label">
                                                 {{ $ad->descripcion }}
                                             </label>

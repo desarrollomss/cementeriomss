@@ -27,6 +27,7 @@
         border: 0px;
         outline: none;
         border-bottom: 1px solid #0DA8EE;
+        width: 95%;
     }
 
     .titulos {
@@ -83,9 +84,11 @@
                         <input type="text" name="observaciones" class="caja" readonly>
                     </div>
                 </div>
-
-                <!-- <input type="text" name="imagen" readonly id="imgdetalle"> -->
-                <img src="http://dummyimage.com/250x155/" id="imgdetalle" alt="Imagen" max="200" min="200">
+                <div class="form-row mt-4">
+                    <div class="col">
+                        <img id="imgdetalle" alt="Imagen" width="300" height="300"  class="mx-auto d-block">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-dismiss="modal">Cerra</button>
