@@ -41,7 +41,7 @@ class TumbasController extends Controller
             $fecha_deceso = "";
             if($row->fecha_deceso == null)
             {
-                $fec_format = "Sin Fecha";
+                $fec_format = "SIN FECHA";
             }else{
                 $fecha_deceso = $row->fecha_deceso;
                 $fec_format = date('d-m-Y', strtotime($fecha_deceso));
@@ -52,7 +52,7 @@ class TumbasController extends Controller
             if (auth()->user()->can('ver-registers'))
             {
                 return '<td>
-                            <button type="button" class="btn btn-success btn-sm" data-id="'.$row->id.'" id="modalTumbasDeta">Ver</button>
+                            <button type="button" class="btn btn-success btn-sm" data-id="'.$row->id.'" id="modalTumbasDeta"><em class="fas fa-eye"></em></button>
                         </td>';
             }
         })
@@ -60,7 +60,8 @@ class TumbasController extends Controller
             if (auth()->user()->can('editar-registers'))
             {
                 return '<td>
-                            <a href="registro/'.$row->id.'/editar" class="btn btn-info btn-sm">Editar</a>
+                            <a href="registro/'.$row->id.'/editar" class="btn btn-info btn-sm"><i
+                            class="fas fa-user-edit"></i></a>
                         </td>';
             }
         })
@@ -68,7 +69,8 @@ class TumbasController extends Controller
             if (auth()->user()->can('borrar-registers'))
             {
                 return '<td>
-                            <button type="button" class="btn btn-danger btn-sm" data-id="'.$row->id.'" id="frmDelete">Borrar</a>
+                            <button type="button" class="btn btn-danger btn-sm" data-id="'.$row->id.'" id="frmDelete"><i
+                            class="fas fa-user-slash"></i></a>
                         </td>';
             }
         })
@@ -121,7 +123,6 @@ class TumbasController extends Controller
         inner join c_observaciones co
         on ro.id_observaciones = co.id
         where r.id ='.$id));
-        $fformat = date('d-m-Y', strtotime($query[0]->fecha_deceso));
-        return response()->json(['detalle'=>$query,'ff'=>$fformat]);
+        return response()->json(['detalle'=>$query]);
     }
 }

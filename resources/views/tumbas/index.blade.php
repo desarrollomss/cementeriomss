@@ -113,7 +113,6 @@
                 {data: 'ver'},
                 {data: 'editar'},
                 {data: 'borrar'}
-
             ],
             "language": {
                 "lengthMenu": "Mostrar " +
@@ -146,21 +145,8 @@
             $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
             $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
             $('.tumbadetalle').find('input[name="observaciones"]').val(data.detalle[0].observacion);
-            if(data.ff == null)
-            {
-                $('.tumbadetalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
-            }
-            else{
-                $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.ff);
-            }
-
-            if(data.detalle[0].imagen == null)
-            {
-                $('.tumbadetalle').find('input[name="imagen"]').val("SIN IMAGEN");
-            }
-            else{
-                $('.tumbadetalle').find('input[name="imagen"]').val(data.detalle[0].imagen);
-            }
+            $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.detalle[0].fecha_deceso);
+            $('.tumbadetalle').find('input[name="imagen"]').val(data.detalle[0].imagen);
             $('.tumbadetalle').modal('show');
          },'json');
     });

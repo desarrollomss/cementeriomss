@@ -84,6 +84,7 @@
                     </div>
                 </div>
 
+                <p class="titulos">Imagen </p>
                 <input type="text" name="imagen" readonly>
             </div>
             <div class="modal-footer">
