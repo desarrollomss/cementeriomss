@@ -12,10 +12,19 @@
                         <div class="row">
                             <div class="col">
                                 @can('crear-registers')
-                                    <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}" ><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                <a class="btn btn-info mb-3" href="{{ route('tumbas.create') }}"><em class="fas fa-check-square"></em> Nuevo registro</a>
                                 @endcan
                             </div>
                         </div>
+
+                        @if (session()->has('success'))
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>{{ session()->get('success') }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         <table class="table table-responsive table-hover table-striped mt-2" id="tumbas">
                             <thead class="bg-success">
                                 <th style="color: #fff">Nombres</th>
@@ -26,7 +35,6 @@
                                 <th style="color: #fff">Nro</th>
                                 <th style="color: #fff">Ubicación</th>
                                 <th style="color: #fff">Fecha Deceso</th>
-                                <th style="color: #fff">Observ</th>
                                 @can('ver-registers')
                                 <th style="color: #fff">Ver</th>
                                 @endcan
@@ -109,8 +117,7 @@
                 [50, 100, 150, 200, 250, "Todos"]
             ],
             "ajax": "{{route('obtener.tumbas')}}",
-            "columns": [
-                {
+            "columns": [{
                     data: 'nombres'
                 },
                 {
@@ -134,9 +141,7 @@
                 {
                     data: 'fecha_deceso'
                 },
-                {
-                    data: 'observaciones'
-                },
+
                 {
                     data: 'ver'
                 },
@@ -180,14 +185,40 @@
             $('.tumbadetalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
             $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
             $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
-            $('.tumbadetalle').find('input[name="observaciones"]').val(data.detalle[0].observacion);
-            $('.tumbadetalle').find('input[name="fecha_deceso"]').val(data.detalle[0].fecha_deceso);
 
+            if(data.detalle[0].fecha_deceso != null)
+            {
+                let fecha = data.detalle[0].fecha_deceso;
+                let fsplit = fecha.split(' ');
+                let fformat = fsplit[0];
+                $('.tumbadetalle').find('input[name="fecha_deceso"]').val(fformat);
+            }else{
+                $('.tumbadetalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
+            }
+
+            let obslista = $('.tumbadetalle').find('.obslista');
+            let adilista = $('.tumbadetalle').find('.adilista');
+
+            if (data.obs != null) {
+                $('.obslista').empty();
+                for (let index = 0; index < data.obs.length; index++) {
+                    const element = data.obs[index].observacion;
+                    obslista.append(`<li>${element}</li>`);
+                }
+            }
+
+            if(data.ads != null)
+            {
+                $('.adilista').empty();
+                for (let index = 0; index < data.ads.length; index++) {
+                    const element = data.ads[index].adicional;
+                    adilista.append(`<li>${element}</li>`);
+                }
+            }
 
             let imgdeta = data.detalle[0].imagen;
             let imagen_uri = "{{ asset('imagen/{img}') }}";
             imagen_uri = imagen_uri.replace('{img}', imgdeta);
-
             if (data.detalle[0].imagen == '') {
                 $('.tumbadetalle').find("#imgdetalle").attr("src", `${imgdefault}`);
             } else {

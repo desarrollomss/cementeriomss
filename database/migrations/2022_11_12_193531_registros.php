@@ -15,6 +15,7 @@ class Registros extends Migration
     {
         Schema::create('registros', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('codigounico',10);
             $table->unsignedBigInteger('id_tipo_reg');
             $table->foreign('id_tipo_reg')->references('id')->on('c_tipo_registros');
             $table->unsignedBigInteger('id_nivel');

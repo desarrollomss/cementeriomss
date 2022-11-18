@@ -47,7 +47,7 @@
                             </button>
                         </div>
                         @endif
-                        <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <form action="{{route('tumbas.store')}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" value="3" name="tiporegistro">
                             <div class="row">
@@ -90,19 +90,19 @@
                                 <div class="col-xs-12 col-sm-12 col-md-4">
                                     <div class="form-group">
                                         <label for="apaterno">Apellido parterno</label>
-                                        <input type="text" required id="aparteno" name="ap_paterno" placeholder="Apellido Parterno" class="form-control" onkeyup="mayus(this);">
+                                        <input type="text" required id="aparteno" name="paterno" placeholder="Apellido Parterno" class="form-control" onkeyup="mayus(this);">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-4">
                                     <div class="form-group">
                                         <label for="amaterno">Apellido marterno</label>
-                                        <input type="text" required id="aparteno" name="ap_materno" placeholder="Apellido Marterno" class="form-control" onkeyup="mayus(this);">
+                                        <input type="text" required id="aparteno" name="materno" placeholder="Apellido Marterno" class="form-control" onkeyup="mayus(this);">
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-4">
                                     <div class="form-group">
                                         <label for="fecha">Fecha de deceso</label>
-                                        <input type="date" required id="fecha" name="fecha_deceso" placeholder="Fecha de Deceso" class="form-control">
+                                        <input type="date" id="fecha" name="fecha_deceso" placeholder="Fecha de Deceso" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -147,10 +147,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1 d-flex justify-content-start">
+                                <div class="col-md-2 d-flex justify-content-start">
                                     <button type="submit" class="btn btn-success my-2 btn-block">Guardar</button>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-1 d-flex justify-content-end">
+                                <div class="col-xs-12 col-sm-12 col-md-2 d-flex justify-content-end">
                                     <a href="{{route('tumbas.index')}}" class="btn btn-danger my-2 btn-block" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
                                 </div>
                             </div>

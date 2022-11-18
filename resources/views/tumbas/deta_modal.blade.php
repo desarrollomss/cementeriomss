@@ -26,12 +26,16 @@
         background-color: transparent;
         border: 0px;
         outline: none;
-        border-bottom: 1px solid #0DA8EE;
         width: 95%;
     }
 
     .titulos {
         color: #0DA8EE;
+    }
+
+    ul{
+        list-style: none;
+        color: #000;
     }
 </style>
 <div class="modal fade tumbadetalle" id="tumbasdeta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -81,12 +85,23 @@
                         <p class="titulos">Observaciones </p>
                     </div>
                     <div class="col">
-                        <input type="text" name="observaciones" class="caja" readonly>
+                        <ul class="obslista">
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-4">
+                        <p class="titulos">Adicionales </p>
+                    </div>
+                    <div class="col">
+
+                        <ul class="adilista">
+                        </ul>
                     </div>
                 </div>
                 <div class="form-row mt-4">
                     <div class="col">
-                        <img id="imgdetalle" alt="Imagen" width="300" height="300"  class="mx-auto d-block">
+                        <img id="imgdetalle" alt="Imagen" width="400" height="300" class="mx-auto d-block">
                     </div>
                 </div>
             </div>

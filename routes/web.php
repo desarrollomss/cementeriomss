@@ -34,9 +34,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware'=>['auth']],function () {
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
+    // Rutas para MODULO TUMBAS
     Route::get('/cementerio/registros/tumbas', [TumbasController::class, 'index'])->name('tumbas.index');
     Route::get('obtenertumbas', [TumbasController::class, 'obtenertumbas'])->name('obtener.tumbas');
     Route::get('/cementerio/registros/crear',[TumbasController::class, 'create'])->name('tumbas.create');
     Route::get('detalletumbas',[TumbasController::class, 'detalletumbas'])->name('detalle.tumbas');
     Route::post('/cementerio/registros/crear',[TumbasController::class, 'store'])->name('tumbas.store');
+    Route::get('/cementerio/registros/{id}/edit',[TumbasController::class, 'edit'])->name('tumbas.edit');
 });
+
