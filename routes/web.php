@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TumbasController;
+use App\Http\Controllers\ConsultasController;
 use Faker\Guesser\Name;
 
 /*
@@ -41,5 +42,7 @@ Route::group(['middleware'=>['auth']],function () {
     Route::get('detalletumbas',[TumbasController::class, 'detalletumbas'])->name('detalle.tumbas');
     Route::post('/cementerio/registros/crear',[TumbasController::class, 'store'])->name('tumbas.store');
     Route::get('/cementerio/registros/{id}/edit',[TumbasController::class, 'edit'])->name('tumbas.edit');
+    Route::put('/cementerio/registros/{id}/update',[TumbasController::class, 'update'])->name('tumbas.update');
+
 });
 

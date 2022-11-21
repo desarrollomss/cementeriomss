@@ -101,7 +101,7 @@
                 </div>
                 <div class="form-row mt-4">
                     <div class="col">
-                        <img id="imgdetalle" alt="Imagen" width="400" height="300" class="mx-auto d-block">
+                        <img id="imgdetalle" alt="Imagen" style="max-height: 230px;" class="mx-auto d-block">
                     </div>
                 </div>
             </div>

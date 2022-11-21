@@ -54,7 +54,7 @@ class TumbasController extends Controller
             if (auth()->user()->can('ver-registers'))
             {
                 return '<td>
-                            <button type="button" class="btn btn-success btn-sm" data-id="'.$row->id.'" id="modalTumbasDeta" onclick(limpiarlista();)><em class="fas fa-eye"></em></button>
+                            <button type="button" class="btn btn-success btn-sm" data-id="'.$row->id.'" id="modalTumbasDeta"><em class="fas fa-eye"></em></button>
                         </td>';
             }
         })
@@ -62,7 +62,7 @@ class TumbasController extends Controller
             if (auth()->user()->can('editar-registers'))
             {
                 return '<td>
-                            <a href=" /cementerio/registros/'.$row->id.'/edit" class="btn btn-info btn-sm"><i
+                            <a href="/cementerio/registros/'.$row->id.'/edit" class="btn btn-info btn-sm"><i
                             class="fas fa-user-edit"></i></a>
                         </td>';
             }
@@ -180,11 +180,74 @@ class TumbasController extends Controller
     public function edit($id)
     {
         $registro = Registros::find($id);
-        dd($registro);
+        $fec_format = date('Y-m-d', strtotime($registro->fecha_deceso));
         $niveles = DB::table('c_niveles')->get();
         $ubicacion = DB::table('c_ubicaciones')->where('codigo','like','T-%')->select('id','codigo','descripcion')->orderBy('codigo','asc')->get();
+
+        $obsreg = DB::table('registros_observaciones')->where('registros_observaciones.id_registros',$id)->pluck('registros_observaciones.id_observaciones','registros_observaciones.id_observaciones')->all();
+
         $observaciones = DB::table('c_observaciones')->get();
+
+        $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.id_registros',$id)->pluck('adicionales_registros.id_adicionales','adicionales_registros.id_adicionales')->all();
+
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.editar',compact('regisro','observaciones','niveles','ubicacion','adicionales'));
+        return view('tumbas.editar',compact('adsreg','obsreg','observaciones','fec_format','registro','niveles','ubicacion','adicionales'));
+
+    }
+
+    public function update(Request $request,$id)
+    {
+
+        $msn = "Registro Actualizado Correctamente!";
+        $registro = Registros::find($id);
+
+        $this->validate($request,[
+            'nivel'=>'required',
+            'ubicacion'=>'required',
+            'numero'=>'required',
+            'nombres'=>'required',
+            'paterno'=>'required',
+            'materno'=>'required',
+            'imagen'=>'image:jpeg,jpg,png|max:3072'
+        ]);
+
+        $registro->id_tipo_reg = $request->tiporegistro;
+        $registro->id_nivel = $request->nivel;
+        $registro->id_ubicacion = $request->ubicacion;
+        $registro->numero = $request->numero;
+        $registro->nombres = $request->nombres;
+        $registro->paterno = $request->paterno;
+        $registro->materno = $request->materno;
+        $registro->fecha_deceso = $request->fecha_deceso;
+        $registro->imagen = $request->imagen;
+        $registro->ip_usuario = request()->ip();
+        $registro->usuario_modificador = Auth::user()->name;
+        $registro->deleted_at = null;
+
+        if($image = $request->file('imagen')){
+            $rutaGaurdada = 'imagen/';
+            $imgRegis = date('YmdHis').".".$image->getClientOriginalExtension();
+            $image->move($rutaGaurdada,$imgRegis);
+            $registro['imagen'] = "$imgRegis";
+        }else{
+            unset($registro['imagen']);
+        }
+
+        // $registro->save();
+
+        $observ = $request->observaciones;
+        $adicio = $request->adicionales;
+
+        $obtnerid = DB::table('registros')->where('codigounico','=',$registro->codigounico)->get();
+        $regsave = Registros::where('id',$obtnerid[0]->id)->get();
+
+        for ($i=0; $i < sizeof($observ); $i++) {
+            DB::insert('update registros_observaciones as ro set id_registros, id_observaciones where ro.id',[$regsave[0]->id,$observ[$i]]);
+        }
+        for ($i=0; $i < sizeof($adicio); $i++) {
+            DB::insert('insert into adicionales_registros (id_adicionales,id_registros) values (?,?)',[$adicio[$i],$regsave[0]->id]);
+        }
+
+        return redirect()->route('tumbas.index')->with('success',$msn);
     }
 }

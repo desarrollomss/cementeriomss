@@ -82,6 +82,5 @@ $conCuarteles = Registros::where('id_tipo_reg',1)->count();
             </div>
         </div>
     </div>
-    </div>
 </section>
 @endsection

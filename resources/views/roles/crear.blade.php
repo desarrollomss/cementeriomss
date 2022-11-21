@@ -53,10 +53,10 @@ Crear Rol |
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-1 d-flex justify-content-start">
+                            <div class="col-md-2 d-flex justify-content-start">
                                 <button type="submit" class="btn btn-success my-2 btn-block">Guardar</button>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-1 d-flex justify-content-end">
+                            <div class="col-xs-12 col-sm-12 col-md-2 d-flex justify-content-end">
                                 <a href="{{route('roles.index')}}" class="btn btn-danger my-2 btn-block" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
                             </div>
                         </div>
