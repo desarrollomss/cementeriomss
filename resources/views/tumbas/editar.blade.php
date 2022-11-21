@@ -50,6 +50,7 @@
                         <form action="{{route('tumbas.update',$registro->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
+                            <input type="hidden" value="3" name="tiporegistro" value="{{$registro->id_tipo_reg}}">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-2">
                                     <div class="form-group">

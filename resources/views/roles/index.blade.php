@@ -27,7 +27,7 @@
                                             <td>{{ $role->name }}</td>
                                             @can('editar-rols')
                                                 <td>
-                                                    <a class="btn btn-warning" href="{{ route('roles.edit', $role->id) }}"><i
+                                                    <a class="btn btn-info" href="{{ route('roles.edit', $role->id) }}"><i
                                                             class="fas fa-edit"></i></a>
                                                 @endcan
                                                 @can('borrar-rols')
@@ -46,7 +46,7 @@
                                 </tbody>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                         swal("El registro se elimino de la base de datos", {
                             icon: "success",
                         });
-                    } 
+                    }
                 });
         });
     </script>
