@@ -43,6 +43,5 @@ Route::group(['middleware'=>['auth']],function () {
     Route::post('/cementerio/registros/crear',[TumbasController::class, 'store'])->name('tumbas.store');
     Route::get('/cementerio/registros/{id}/edit',[TumbasController::class, 'edit'])->name('tumbas.edit');
     Route::put('/cementerio/registros/{id}/update',[TumbasController::class, 'update'])->name('tumbas.update');
-
 });
 

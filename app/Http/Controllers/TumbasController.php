@@ -134,12 +134,12 @@ class TumbasController extends Controller
 
         if ($observ != null) {
             for ($i = 0; $i < sizeof($observ); $i++) {
-                DB::insert('insert into registros_observaciones (id_registros,id_observaciones) values (?,?)', [$regsave[0]->id, $observ[$i]]);
+                DB::insert('insert into observaciones_registros (registros_id,observaciones_id) values (?,?)', [$regsave[0]->id, $observ[$i]]);
             }
         }
         if ($adicio != null) {
             for ($i = 0; $i < sizeof($adicio); $i++) {
-                DB::insert('insert into adicionales_registros (id_adicionales,id_registros) values (?,?)', [$adicio[$i], $regsave[0]->id]);
+                DB::insert('insert into adicionales_registros (registros_id,adicionales_id) values (?,?)', [$regsave[0]->id, $adicio[$i]]);
             }
         }
 
@@ -152,17 +152,17 @@ class TumbasController extends Controller
         $query = DB::select(DB::raw('select r.nombres ,r.paterno ,r.materno ,r.numero , r.fecha_deceso, r.imagen from registros r where id =' . $id));
 
         $queryobs = DB::select(DB::raw('select co.descripcion as "observacion" from registros r
-        inner join registros_observaciones ro
-        on r.id = ro.id_registros
+        inner join observaciones_registros ro
+        on r.id = ro.registros_id
         inner join c_observaciones co
-        on ro.id_observaciones = co.id
+        on ro.observaciones_id = co.id
         where r.id = ' . $id));
 
         $queryads = DB::select(DB::raw('select ca.descripcion as "adicional" from registros r
         inner join adicionales_registros ar
-        on r.id = ar.id_registros
+        on r.id = ar.registros_id
         inner join c_adicionales ca
-        on ar.id_adicionales = ca.id
+        on ar.adicionales_id = ca.id
         where r.id = ' . $id));
 
         return response()->json(['detalle' => $query, 'obs' => $queryobs, 'ads' => $queryads]);
@@ -175,11 +175,11 @@ class TumbasController extends Controller
         $niveles = DB::table('c_niveles')->get();
         $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'T-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
 
-        $obsreg = DB::table('registros_observaciones')->where('registros_observaciones.id_registros', $id)->pluck('registros_observaciones.id_observaciones', 'registros_observaciones.id_observaciones')->all();
+        $obsreg = DB::table('observaciones_registros')->where('observaciones_registros.registros_id', $id)->pluck('observaciones_registros.observaciones_id', 'observaciones_registros.observaciones_id')->all();
 
         $observaciones = DB::table('c_observaciones')->get();
 
-        $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.id_registros', $id)->pluck('adicionales_registros.id_adicionales', 'adicionales_registros.id_adicionales')->all();
+        $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.registros_id', $id)->pluck('adicionales_registros.adicionales_id', 'adicionales_registros.adicionales_id')->all();
 
         $adicionales = DB::table('c_adicionales')->get();
         return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'fec_format', 'registro', 'niveles', 'ubicacion', 'adicionales'));
@@ -223,30 +223,11 @@ class TumbasController extends Controller
             unset($registro['imagen']);
         }
 
-
         $observ = $request->observaciones;
         $adicio = $request->adicionales;
 
-        // $obtnerid = DB::table('registros')->where('codigounico', '=', $registro->codigounico)->get();
-        // $regsave = Registros::where('id', $obtnerid[0]->id)->get();
-
-        $obteneradicionales = DB::select(DB::raw('select ar.id, ar.id_adicionales from adicionales_registros ar
-        where ar.id_registros ='.$id));
-
-        $obtenerobservaciones = DB::select(DB::raw('select ro.id from registros_observaciones ro
-        where ro.id_registros ='.$id));
-
-
-        if ($observ != null) {
-            for ($i=0; $i < sizeof($observ) ; $i++) {
-                DB::update('update registros_observaciones set id_observaciones = ? where id = ?', [$observ[$i],$obtenerobservaciones[$i]->id]);
-            };
-        }
-        if ($adicio != null) {
-            for ($i = 0; $i < sizeof($adicio); $i++) {
-                DB::update('update adicionales_registros set id_adicionales = ? where id = ?', [$adicio[$i],$obteneradicionales[$i]->id]);
-            }
-        }
+        $registro->observaciones()->sync($observ);
+        $registro->adicionales()->sync($adicio);
 
         $registro->save();
 
