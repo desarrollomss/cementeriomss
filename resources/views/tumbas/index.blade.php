@@ -18,7 +18,7 @@
                         </div>
 
                         @if (session()->has('success'))
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <div class="alert alert-info alert-dismissible fade show mensaje" role="alert">
                             <strong>{{ session()->get('success') }}</strong>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -55,11 +55,17 @@
     </div>
 </section>
 @include('tumbas.deta_modal')
+@include('eliminar_modal')
 @endsection
 @section('scripts')
 
 <script>
     $(document).ready(function(e) {
+
+        setTimeout(function() {
+            $(".mensaje").fadeOut(1500);
+        }, 1500);
+
         $('#imagen').change(function() {
             let reader = new FileReader();
             reader.onload = (e) => {
@@ -68,32 +74,6 @@
             reader.readAsDataURL(this.files[0]);
         });
     });
-
-
-    $('#frmDelete').submit(function(e) {
-        e.preventDefault();
-        swal({
-                title: 'Seguro de eliminar?',
-                text: "Si eliminas este registro no podrás recuperarlo",
-                icon: "warning",
-                showCancelButton: true,
-                buttons: true,
-                buttons: {
-                    cancel: 'No, eliminar',
-                    confirm: "Si, Eliminar",
-                },
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    this.submit();
-                    swal("El registro se elimino de la base de datos", {
-                        icon: "success",
-                    });
-                }
-            });
-    });
-
 
     function mayus(e) {
         e.value = e.value.toUpperCase();
@@ -176,6 +156,16 @@
         });
     });
 
+    $(document).on('click','#eliminar', function(){
+       var id = $(this).data('id');
+       $.get('<?= route("detalle.eliminar")?>',{
+        id:id
+       },function(data){
+        $('.eliminar').find('input[name="id"]').val(data.detalle[0].id);
+        $('.eliminar').find('.nombre').text(`${data.detalle[0].nombres} ${data.detalle[0].paterno} ${data.detalle[0].materno}`);
+       },'json');
+    });
+
     $(document).on('click', '#modalTumbasDeta', function() {
         var id = $(this).data('id');
         var imgdefault = "{{asset('/imagen/default.png')}}";
@@ -186,13 +176,12 @@
             $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
             $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
 
-            if(data.detalle[0].fecha_deceso != null)
-            {
+            if (data.detalle[0].fecha_deceso != null) {
                 let fecha = data.detalle[0].fecha_deceso;
                 let fsplit = fecha.split(' ');
                 let fformat = fsplit[0];
                 $('.tumbadetalle').find('input[name="fecha_deceso"]').val(fformat);
-            }else{
+            } else {
                 $('.tumbadetalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
             }
 
@@ -207,8 +196,7 @@
                 }
             }
 
-            if(data.ads != null)
-            {
+            if (data.ads != null) {
                 $('.adilista').empty();
                 for (let index = 0; index < data.ads.length; index++) {
                     const element = data.ads[index].adicional;

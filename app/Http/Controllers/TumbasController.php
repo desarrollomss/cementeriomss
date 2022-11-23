@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Registros;
+use Carbon\Carbon;
 
 class TumbasController extends Controller
 {
@@ -33,6 +34,7 @@ class TumbasController extends Controller
             ->join('c_niveles as cn', 'registros.id_nivel', '=', 'cn.id')
             ->join('c_ubicaciones as cu', 'registros.id_ubicacion', '=', 'cu.id')
             ->where('cu.codigo', 'like', 'T-%')
+            ->whereNull('deleted_at')
             ->select('registros.id', 'cu.codigo', 'cu.descripcion as ubicacion', 'cn.descripcion as nivel', 'registros.numero', 'registros.nombres', 'registros.paterno', 'registros.materno', 'registros.fecha_deceso', 'registros.imagen')
             ->orderBy('registros.id', 'desc');
 
@@ -51,24 +53,25 @@ class TumbasController extends Controller
             ->addColumn('ver', function ($row) {
                 if (auth()->user()->can('ver-registers')) {
                     return '<td>
-                            <button type="button" class="btn btn-success btn-sm" data-id="' . $row->id . '" id="modalTumbasDeta"><em class="fas fa-eye"></em></button>
-                        </td>';
+                                <button type="button" class="btn btn-success btn-sm" data-id="' . $row->id . '" id="modalTumbasDeta"><em class="fas fa-eye"></em></button>
+                            </td>';
                 }
             })
             ->addColumn('editar', function ($row) {
                 if (auth()->user()->can('editar-registers')) {
                     return '<td>
                             <a href="/cementerio/registros/' . $row->id . '/edit" class="btn btn-info btn-sm"><i
-                            class="fas fa-user-edit"></i></a>
-                        </td>';
+                                class="fas fa-user-edit"></i></a>
+                            </td>';
                 }
             })
             ->addColumn('borrar', function ($row) {
                 if (auth()->user()->can('borrar-registers')) {
                     return '<td>
-                            <button type="button" class="btn btn-danger btn-sm" data-id="' . $row->id . '" id="frmDelete"><i
-                            class="fas fa-user-slash"></i></a>
-                        </td>';
+                                <button type="button" class="btn btn-danger btn-sm" data-id="' . $row->id . '" data-toggle="modal" data-target="#exampleModal" id="eliminar">
+                                    <i class="fas fa-user-slash"></i>
+                                </button>
+                            </td>';
                 }
             })
             ->rawColumns(['ver', 'editar', 'borrar', 'fecha_deceso'])
@@ -111,7 +114,6 @@ class TumbasController extends Controller
         $registro->paterno = $request->paterno;
         $registro->materno = $request->materno;
         $registro->fecha_deceso = $request->fecha_deceso;
-        $registro->imagen = $request->imagen;
         $registro->ip_usuario = request()->ip();
         $registro->nombre_usuario = Auth::user()->name;
         $registro->usuario_modificador = null;
@@ -168,6 +170,7 @@ class TumbasController extends Controller
         return response()->json(['detalle' => $query, 'obs' => $queryobs, 'ads' => $queryads]);
     }
 
+
     public function edit($id)
     {
         $registro = Registros::find($id);
@@ -209,18 +212,19 @@ class TumbasController extends Controller
         $registro->paterno = $request->paterno;
         $registro->materno = $request->materno;
         $registro->fecha_deceso = $request->fecha_deceso;
-        $registro->imagen = $request->imagen;
         $registro->ip_usuario = request()->ip();
         $registro->usuario_modificador = Auth::user()->name;
         $registro->deleted_at = null;
 
-        if ($image = $request->file('imagen')) {
-            $rutaGaurdada = 'imagen/';
-            $imgRegis = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($rutaGaurdada, $imgRegis);
-            $registro['imagen'] = "$imgRegis";
+        if ($request->imagen != null) {
+            if ($image = $request->file('imagen')) {
+                $rutaGaurdada = 'imagen/';
+                $imgRegis = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($rutaGaurdada, $imgRegis);
+                $registro['imagen'] = "$imgRegis";
+            }
         } else {
-            unset($registro['imagen']);
+            $registro->imagen = 'default.png';
         }
 
         $observ = $request->observaciones;
@@ -232,5 +236,30 @@ class TumbasController extends Controller
         $registro->save();
 
         return redirect()->route('tumbas.index')->with('success', $msn);
+    }
+
+    public function detalleeliminar(Request $request)
+    {
+        $id = $request->id;
+        $query = DB::select(DB::raw('select r.id, r.nombres, r.paterno, r.materno from registros r where id =' . $id));
+        return response()->json(['detalle'=>$query]);
+    }
+
+    public function delete(Request $request)
+    {
+        $msn = "Registro Eliminado!";
+
+        $registro = Registros::find($request->id);
+
+        if (!is_null($registro)) {
+            $registro->usuario_modificador = Auth::user()->name;
+            $registro->deleted_at = Carbon::now()->toDateTimeString();
+            $registro->ip_usuario = request()->ip();
+            $registro->update();
+            return back()->with('success', $msn);
+        } else {
+            $msn = 'No Se Elimino El Registro ¡Error!';
+            return back()->with('error', $msn);
+        }
     }
 }
