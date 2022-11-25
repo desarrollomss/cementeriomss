@@ -103,7 +103,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-4">
                                     <div class="form-group">
                                         <label for="fecha">Fecha de deceso</label>
-                                        <input type="date" id="fecha" name="fecha_deceso" class="form-control" value="{{ $fec_format }}">
+                                        <input type="date" id="fecha" name="fecha_deceso" class="form-control" value="{{ $registro->fecha_deceso }}">
                                     </div>
                                 </div>
                             </div>

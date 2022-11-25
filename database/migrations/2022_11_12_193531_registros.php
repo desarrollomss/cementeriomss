@@ -26,7 +26,7 @@ class Registros extends Migration
             $table->string('nombres')->nullable(true);
             $table->string('paterno')->nullable(true);
             $table->string('materno')->nullable(true);
-            $table->dateTime('fecha_deceso')->nullable(true);
+            $table->date('fecha_deceso')->nullable(true);
             $table->string('imagen')->nullable(true);
             $table->string('ip_usuario')->nullable(true);
             $table->string('nombre_usuario')->nullable(true);

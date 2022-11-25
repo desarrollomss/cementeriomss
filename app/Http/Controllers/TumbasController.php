@@ -174,7 +174,6 @@ class TumbasController extends Controller
     public function edit($id)
     {
         $registro = Registros::find($id);
-        $fec_format = date('Y-m-d', strtotime($registro->fecha_deceso));
         $niveles = DB::table('c_niveles')->get();
         $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'T-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
 
@@ -185,7 +184,7 @@ class TumbasController extends Controller
         $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.registros_id', $id)->pluck('adicionales_registros.adicionales_id', 'adicionales_registros.adicionales_id')->all();
 
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'fec_format', 'registro', 'niveles', 'ubicacion', 'adicionales'));
+        return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
     }
 
     public function update(Request $request, $id)
