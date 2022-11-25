@@ -40,6 +40,7 @@ Route::group(['middleware'=>['auth']],function () {
     Route::get('/cementerio/registros/tumbas', [TumbasController::class, 'index'])->name('tumbas.index');
     Route::get('obtenertumbas', [TumbasController::class, 'obtenertumbas'])->name('obtener.tumbas');
     Route::get('/cementerio/registros/crear',[TumbasController::class, 'create'])->name('tumbas.create');
+    Route::post('/cementerio/registros/crear',[TumbasController::class,'store'])->name('tumbas.store');
     Route::get('detalletumbas',[TumbasController::class, 'detalletumbas'])->name('detalle.tumbas');
     Route::get('/cementerio/registros/{id}/edit',[TumbasController::class, 'edit'])->name('tumbas.edit');
     Route::put('/cementerio/registros/{id}/update',[TumbasController::class, 'update'])->name('tumbas.update');
