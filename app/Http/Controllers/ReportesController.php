@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\TumbasExport;
+use App\Exports\TumbasConsultaExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -55,6 +56,30 @@ class ReportesController extends Controller
         elseif($tipoRegistro == "3"){
             $msn = "Exportar Cuarteles";
             return back()->with('success',$msn);
+        }
+    }
+    public function registrosexportarconsulta($id)
+    {
+        return Excel::download(new TumbasConsultaExport($id), 'filtro_tumbas.xls');;
+    }
+
+    public function registrosporanio(Request $request)
+    {
+        $anio = $request->anio;
+        $registros = DB::table('registros')
+        ->whereYear('fecha_deceso',$anio)
+        ->count();
+
+        $anioactual = (int)date("Y");
+
+        if($registros > 0)
+        {
+            $aniosdeceso = $anioactual - $anio;
+            $resp = 'Cantidad de Registros : '. $registros.' Tiempo de decesor : '. $aniosdeceso.' Años';
+            return $resp;
+        }else{
+            $resp ="Sin Datos Para Esa Fecha";
+            return $resp;
         }
     }
 }

@@ -49,7 +49,9 @@ Route::group(['middleware'=>['auth']],function () {
 
     //RUTAS para REPORTES
     Route::get('/cementerio/reportes',[ReportesController::class, 'index'])->name('reportes.general');
-    Route::post('/cementerio/export/tumbas', [ReportesController::class, 'registrosexportar'])->name('registros.export');
+    Route::post('/cementerio/export/general', [ReportesController::class, 'registrosexportar'])->name('registros.export');
     Route::post('/consultaobs',[ReportesController::class,'consultaobservaciones'])->name('consulta');
+    Route::get('/cementerio/export/{id}/filtro', [ReportesController::class, 'registrosexportarconsulta'])->name('registros.consulta.export');
+    Route::post('/cementerio/export/anio', [ReportesController::class, 'registrosporanio'])->name('registrosporanio.export');
 });
 

@@ -10,8 +10,21 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <hr>
+                        <form action="{{route('registrosporanio.export')}}" method="POST">
+                            @csrf
+                            <div class="row my-2">
+                                <div class="col-xl-3 col-sm-12 col-md-8">
+                                    <input type="text" class="form-control" style="width: 40%;" name="anio">
+                                </div>
+                                <div class="col-xl-3 col-sm-12 col-md-8">
+                                    <button type="submit" class="btn btn-success">CONSULTAR</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
                         <div class="row">
-                            <div class="col mb-3">
+                            <div class="col-xl-12 col-sm-12 col-md-12 mb-2">
                                 <h5>Exportacion de Registros Generales</h5>
                                 @if (session()->has('success'))
                                 <div class="alert alert-info alert-dismissible fade show mensaje" role="alert">
@@ -24,9 +37,9 @@
                             </div>
                         </div>
                         <form action="{{route('registros.export')}}" method="post">
-                            @csrf
                             <div class="row mb-2">
-                                <div class="col-4 mb-2">
+                                @csrf
+                                <div class="col-xl-3 col-sm-12 col-md-12">
                                     <select name="tiporegistro" id="tiposregistros" class="form-control mb-2">
                                         <option selected disabled>SELECCIONAR</option>
                                         <option value="1">TUMBAS</option>
@@ -35,72 +48,75 @@
                                     </select>
                                     <span class="text-danger">Selecciona un tipo de registro para exportar</span>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-xl-3 col-sm-12 col-md-12">
                                     <button type="submit" class="btn btn-success" disabled="disabled" id="exportartiporeg"><i class="fas fa-download"></i> EXPORTAR</button>
                                 </div>
                             </div>
                         </form>
                         <hr>
                         <div class="row">
-                            <div class="col my-2">
+                            <div class="col-xl-12 col-sm-12 col-md-12">
                                 <h5>Consulta de Registros por Observación</h5>
                             </div>
                         </div>
                         <form action="{{route('consulta')}}" method="post">
-                            @csrf
                             <div class="row my-2">
-                                <div class="col-4 mb-2">
+                                @csrf
+                                <div class="col-xl-3 col-sm-12 col-md-8">
                                     <select name="observaciones" id="obs" class="form-control mb-2">
                                         <option selected disabled>SELECCIONAR</option>
                                         @foreach ($observaciones as $obs)
                                         <option value="{{$obs->id}}">{{$obs->descripcion}}</option>
                                         @endforeach
                                     </select>
-                                    <span class="text-danger">Selecciona un tipo de registro para consultar</span>
+                                    <span class="text-danger">Selecciona una observación para consultar</span>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-xl-3 col-sm-12 col-md-2">
                                     <button type="submit" class="btn btn-success" disabled="disabled" id="btnbuscar"><i class="fas fa-search"></i> BUSCAR</button>
                                 </div>
-                                <div class="col-2">
-                                    <a class="btn btn-success mb-3" href="#" id="btnexportarobs"><i class="fas fa-download"></i> Exportar Consulta</a>
+                                <div class="col-xl-3 col-sm-12 col-md-2">
+                                    <a class="btn btn-success mb-3" href="#" id="btnexportarconsulta"><i class="fas fa-download"></i> Exportar Consulta</a>
+                                    <input type="hidden" name="id_obs" id="validobs">
                                 </div>
                             </div>
                         </form>
                         <div class="row">
-                            <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
-                                <thead class="bg-success">
-                                    <th style="color: #fff">Ubicación</th>
-                                    <th style="color: #fff">Nivel</th>
-                                    <th style="color: #fff">Número</th>
-                                    <th style="color: #fff">Nombres</th>
-                                    <th style="color: #fff">A. Paterno</th>
-                                    <th style="color: #fff">A. Materno</th>
-                                    <th style="color: #fff">Fecha Deceso</th>
-                                    <th style="color: #fff">Observaciones</th>
-                                    <th style="color: #fff">Adicionales</th>
-                                </thead>
-                                @if ($respuesta = Session::get('resp'))
-                                <tbody>
-                                    @foreach ($respuesta as $rsp)
-                                    <tr>
-                                        <td>{{$rsp->ubicacion}}</td>
-                                        <td>{{$rsp->nivel}}</td>
-                                        <td>{{$rsp->numero}}</td>
-                                        <td>{{$rsp->nombres}}</td>
-                                        <td>{{$rsp->paterno}}</td>
-                                        <td>{{$rsp->materno}}</td>
-                                        @if ($rsp->fecha_deceso == null)
-                                        <td>SIN FECHA</td>
-                                        @else
-                                        <td>{{$rsp->fecha_deceso}}</td>
-                                        @endif
-                                        <td>{{$rsp->observaciones}}</td>
-                                        <td>{{$rsp->adicionales}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                                @endif
-                            </table>
+                            <div class="col-xl-8 col-sm-12 col-md-12">
+                                <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
+                                    <thead class="bg-success">
+                                        <th style="color: #fff">Ubicación</th>
+                                        <th style="color: #fff">Nivel</th>
+                                        <th style="color: #fff">Número</th>
+                                        <th style="color: #fff">Nombres</th>
+                                        <th style="color: #fff">A. Paterno</th>
+                                        <th style="color: #fff">A. Materno</th>
+                                        <th style="color: #fff">Fecha Deceso</th>
+                                        <th style="color: #fff">Observaciones</th>
+                                        <th style="color: #fff">Adicionales</th>
+                                    </thead>
+                                    @if ($respuesta = Session::get('resp'))
+                                    <tbody>
+                                        @foreach ($respuesta as $rsp)
+                                        <tr>
+                                            <td>{{$rsp->ubicacion}}</td>
+                                            <td>{{$rsp->nivel}}</td>
+                                            <td>{{$rsp->numero}}</td>
+                                            <td>{{$rsp->nombres}}</td>
+                                            <td>{{$rsp->paterno}}</td>
+                                            <td>{{$rsp->materno}}</td>
+                                            @if ($rsp->fecha_deceso == null)
+                                            <td>SIN FECHA</td>
+                                            @else
+                                            <td>{{$rsp->fecha_deceso}}</td>
+                                            @endif
+                                            <td>{{$rsp->observaciones}}</td>
+                                            <td>{{$rsp->adicionales}}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @endif
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,13 +128,16 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-
-        $('#obs').change(function () {
-            $('#btnbuscar').removeAttr("disabled");
-         });
-        $('#tiposregistros').change(function () {
+        $('#tiposregistros').change(function() {
             $('#exportartiporeg').removeAttr("disabled");
-         });
+        });
+        $('#obs').change(function() {
+            $('#btnbuscar').removeAttr("disabled");
+            var seleccion = $('select[name=observaciones]').val();
+            var valor = $('input[name=id_obs]').val(seleccion);
+            var id = valor.val();
+            $(document).find('#btnexportarconsulta').attr('href', `/cementerio/export/${id}/filtro`);
+        });
 
         $('#consulta').DataTable({
             "order": [
@@ -154,6 +173,19 @@
                 }
             },
         });
+
+        function validarNumericos() {
+            if ($('#anio').val() > 9999) {
+                $('#errorcode').css("display", "block");
+                $('#anio').css("border", "1px solid red");
+                $('#anio').focus();
+                event.preventDefault();
+                return false;
+            } else {
+                return true;
+            }
+        }
+
     });
 </script>
 @endsection
