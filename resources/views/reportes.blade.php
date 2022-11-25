@@ -13,19 +13,33 @@
                         <div class="row">
                             <div class="col mb-3">
                                 <h5>Exportacion de Registros Generales</h5>
+                                @if (session()->has('success'))
+                                <div class="alert alert-info alert-dismissible fade show mensaje" role="alert">
+                                    <strong>{{ session()->get('success') }}</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @endif
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <div class="col-4">
-                                <a class="btn btn-primary mb-3" href="{{route('tumbas.export')}}">Exportar Tumbas a Excel</a>
+                        <form action="{{route('registros.export')}}" method="post">
+                            @csrf
+                            <div class="row mb-2">
+                                <div class="col-4 mb-2">
+                                    <select name="tiporegistro" id="tiposregistros" class="form-control mb-2">
+                                        <option selected disabled>SELECCIONAR</option>
+                                        <option value="1">TUMBAS</option>
+                                        <option value="2">MAUSOLEOS</option>
+                                        <option value="3">CUARTELES</option>
+                                    </select>
+                                    <span class="text-danger">Selecciona un tipo de registro para exportar</span>
+                                </div>
+                                <div class="col-2">
+                                    <button type="submit" class="btn btn-success" disabled="disabled" id="exportartiporeg"><i class="fas fa-download"></i> EXPORTAR</button>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <a class="btn btn-primary mb-3" href="#">Exportar Mausoleos a Excel</a>
-                            </div>
-                            <div class="col-4">
-                                <a class="btn btn-primary mb-3" href="#">Exportar Cuarteles a Excel</a>
-                            </div>
-                        </div>
+                        </form>
                         <hr>
                         <div class="row">
                             <div class="col my-2">
@@ -36,53 +50,58 @@
                             @csrf
                             <div class="row my-2">
                                 <div class="col-4 mb-2">
-                                    <select name="observaciones" id="obs" class="form-control">
+                                    <select name="observaciones" id="obs" class="form-control mb-2">
                                         <option selected disabled>SELECCIONAR</option>
                                         @foreach ($observaciones as $obs)
                                         <option value="{{$obs->id}}">{{$obs->descripcion}}</option>
                                         @endforeach
                                     </select>
+                                    <span class="text-danger">Selecciona un tipo de registro para consultar</span>
                                 </div>
                                 <div class="col-2">
-                                    <button type="submit" class="btn btn-success"><i class="fas fa-search"></i> BUSCAR</button>
+                                    <button type="submit" class="btn btn-success" disabled="disabled" id="btnbuscar"><i class="fas fa-search"></i> BUSCAR</button>
                                 </div>
                                 <div class="col-2">
-                                    <a class="btn btn-primary mb-3" href="">Exportar Consulta</a>
+                                    <a class="btn btn-success mb-3" href="#" id="btnexportarobs"><i class="fas fa-download"></i> Exportar Consulta</a>
                                 </div>
                             </div>
                         </form>
-                        <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
-                            <thead class="bg-success">
-                                <th style="color: #fff">Ubicación</th>
-                                <th style="color: #fff">Nivel</th>
-                                <th style="color: #fff">Número</th>
-                                <th style="color: #fff">Nombres</th>
-                                <th style="color: #fff">A. Paterno</th>
-                                <th style="color: #fff">A. Materno</th>
-                                <th style="color: #fff">Fecha Deceso</th>
-                                <th style="color: #fff">Observaciones</th>
-                            </thead>
-                            @if ($respuesta = Session::get('resp'))
-                            <tbody>
-                            @foreach ($respuesta as $rsp)
-                                <tr>
-                                    <td>{{$rsp->ubicacion}}</td>
-                                    <td>{{$rsp->nivel}}</td>
-                                    <td>{{$rsp->numero}}</td>
-                                    <td>{{$rsp->nombres}}</td>
-                                    <td>{{$rsp->paterno}}</td>
-                                    <td>{{$rsp->materno}}</td>
-                                    @if ($rsp->fecha_deceso == null)
+                        <div class="row">
+                            <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
+                                <thead class="bg-success">
+                                    <th style="color: #fff">Ubicación</th>
+                                    <th style="color: #fff">Nivel</th>
+                                    <th style="color: #fff">Número</th>
+                                    <th style="color: #fff">Nombres</th>
+                                    <th style="color: #fff">A. Paterno</th>
+                                    <th style="color: #fff">A. Materno</th>
+                                    <th style="color: #fff">Fecha Deceso</th>
+                                    <th style="color: #fff">Observaciones</th>
+                                    <th style="color: #fff">Adicionales</th>
+                                </thead>
+                                @if ($respuesta = Session::get('resp'))
+                                <tbody>
+                                    @foreach ($respuesta as $rsp)
+                                    <tr>
+                                        <td>{{$rsp->ubicacion}}</td>
+                                        <td>{{$rsp->nivel}}</td>
+                                        <td>{{$rsp->numero}}</td>
+                                        <td>{{$rsp->nombres}}</td>
+                                        <td>{{$rsp->paterno}}</td>
+                                        <td>{{$rsp->materno}}</td>
+                                        @if ($rsp->fecha_deceso == null)
                                         <td>SIN FECHA</td>
-                                    @else
+                                        @else
                                         <td>{{$rsp->fecha_deceso}}</td>
-                                    @endif
-                                    <td>{{$rsp->observaciones}}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                            @endif
-                        </table>
+                                        @endif
+                                        <td>{{$rsp->observaciones}}</td>
+                                        <td>{{$rsp->adicionales}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                                @endif
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,6 +112,14 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+
+        $('#obs').change(function () {
+            $('#btnbuscar').removeAttr("disabled");
+         });
+        $('#tiposregistros').change(function () {
+            $('#exportartiporeg').removeAttr("disabled");
+         });
+
         $('#consulta').DataTable({
             "order": [
                 [0, "asc"]

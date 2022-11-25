@@ -6,8 +6,8 @@
 </li>
 @endcan
 @can('ver-registers')
-<li class="side-menus {{ Request::is('reportes') ? 'active' : '' }}">
-    <a class="nav-link" href="{{url('/cementerio/reportes')}}">
+<li class="side-menus {{ Request::is('cementerio/reportes') ? 'active' : '' }}">
+    <a class="nav-link" href="{{route('reportes.general')}}">
         <i class="fas fa-tachometer-alt"></i><span>Reportes</span>
     </a>
 </li>

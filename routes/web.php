@@ -48,8 +48,8 @@ Route::group(['middleware'=>['auth']],function () {
     Route::post('/cementerio/registros/delete',[TumbasController::class, 'delete'])->name('tumbas.delete');
 
     //RUTAS para REPORTES
-    Route::get('/cementerio/reportes',[ReportesController::class, 'index']);
-    Route::get('/cementerio/export/tumbas', [ReportesController::class, 'exporttumbas'])->name('tumbas.export');
+    Route::get('/cementerio/reportes',[ReportesController::class, 'index'])->name('reportes.general');
+    Route::post('/cementerio/export/tumbas', [ReportesController::class, 'registrosexportar'])->name('registros.export');
     Route::post('/consultaobs',[ReportesController::class,'consultaobservaciones'])->name('consulta');
 });
 
