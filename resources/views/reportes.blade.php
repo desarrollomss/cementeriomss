@@ -15,11 +15,21 @@
                             @csrf
                             <div class="row my-2">
                                 <div class="col-xl-3 col-sm-12 col-md-8">
-                                    <input type="text" class="form-control" style="width: 40%;" name="anio">
+                                    <input type="number" class="form-control" style="width: 40%;" name="anio">
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-8">
                                     <button type="submit" class="btn btn-success">CONSULTAR</button>
                                 </div>
+                                @if (session()->has('rpta'))
+                                <div class="col-xl-6 col-sm-12 col-md-8">
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <strong>{{ session()->get('rpta') }}</strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </form>
                         <hr>

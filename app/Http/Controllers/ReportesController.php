@@ -75,11 +75,11 @@ class ReportesController extends Controller
         if($registros > 0)
         {
             $aniosdeceso = $anioactual - $anio;
-            $resp = 'Cantidad de Registros : '. $registros.' Tiempo de decesor : '. $aniosdeceso.' Años';
-            return $resp;
+            $resp = 'Cantidad de Registros : '. $registros.' Tiempo de deceso : '. $aniosdeceso.' Años';
+            return back()->with('rpta',$resp);
         }else{
             $resp ="Sin Datos Para Esa Fecha";
-            return $resp;
+            return back()->with('rpta',$resp);
         }
     }
 }
