@@ -13,6 +13,6 @@ class Observaciones extends Model
     protected $fillable = ['registros_id','observaciones_id'];
     public function registros()
     {
-        return $this->belongsToMany('Registros','observaciones_registros');
+        return $this->belongsToMany('App\Models\Registros','observaciones_registros');
     }
 }

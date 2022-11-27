@@ -12,6 +12,6 @@ class Adicionales extends Model
     protected $fillable = ['registros_id','adicionales_id'];
     public function registros()
     {
-        return $this->belongsToMany('Registros','adicionales_registros');
+        return $this->belongsToMany('App\Models\Registros','adicionales_registros');
     }
 }
