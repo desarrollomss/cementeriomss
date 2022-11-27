@@ -10,15 +10,19 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <hr>
+                        <div class="row">
+                            <div class="col-xl-12 col-sm-12 col-md-12 mb-2">
+                                <h5>Consulta de Registros y Tiempo de Deceso</h5>
+                            </div>
+                        </div>
                         <form action="{{route('registrosporanio.export')}}" method="POST">
-                            @csrf
                             <div class="row my-2">
+                                @csrf
                                 <div class="col-xl-3 col-sm-12 col-md-8">
-                                    <input type="number" class="form-control" style="width: 40%;" name="anio">
+                                    <input type="number" class="form-control" style="width: 100%;" name="anio" id="anio">
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-8">
-                                    <button type="submit" class="btn btn-success">CONSULTAR</button>
+                                    <button type="submit" class="btn btn-success" disabled id="btnconsultar">CONSULTAR</button>
                                 </div>
                                 @if (session()->has('rpta'))
                                 <div class="col-xl-6 col-sm-12 col-md-8">
@@ -32,7 +36,8 @@
                                 @endif
                             </div>
                         </form>
-                        <hr>
+
+
                         <div class="row">
                             <div class="col-xl-12 col-sm-12 col-md-12 mb-2">
                                 <h5>Exportacion de Registros Generales</h5>
@@ -56,14 +61,14 @@
                                         <option value="2">MAUSOLEOS</option>
                                         <option value="3">CUARTELES</option>
                                     </select>
-                                    <span class="text-danger">Selecciona un tipo de registro para exportar</span>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-12">
-                                    <button type="submit" class="btn btn-success" disabled="disabled" id="exportartiporeg"><i class="fas fa-download"></i> EXPORTAR</button>
+                                    <button type="submit" class="btn btn-success" disabled="disabled" id="exportartiporeg"><em class="fas fa-download"></em> EXPORTAR</button>
                                 </div>
                             </div>
                         </form>
-                        <hr>
+
+
                         <div class="row">
                             <div class="col-xl-12 col-sm-12 col-md-12">
                                 <h5>Consulta de Registros por Observación</h5>
@@ -72,26 +77,25 @@
                         <form action="{{route('consulta')}}" method="post">
                             <div class="row my-2">
                                 @csrf
-                                <div class="col-xl-3 col-sm-12 col-md-8">
+                                <div class="col-xl-6 col-sm-12 col-md-8">
                                     <select name="observaciones" id="obs" class="form-control mb-2">
                                         <option selected disabled>SELECCIONAR</option>
                                         @foreach ($observaciones as $obs)
                                         <option value="{{$obs->id}}">{{$obs->descripcion}}</option>
                                         @endforeach
                                     </select>
-                                    <span class="text-danger">Selecciona una observación para consultar</span>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-2">
-                                    <button type="submit" class="btn btn-success" disabled="disabled" id="btnbuscar"><i class="fas fa-search"></i> BUSCAR</button>
+                                    <button type="submit" class="btn btn-success" disabled="disabled" id="btnbuscar"><em class="fas fa-search"></em> BUSCAR</button>
                                 </div>
-                                <div class="col-xl-3 col-sm-12 col-md-2">
-                                    <a class="btn btn-success mb-3" href="#" id="btnexportarconsulta"><i class="fas fa-download"></i> Exportar Consulta</a>
+                                <div class="col-xl-3 col-sm-12 col-md-2 d-flex justify-content-end">
+                                    <a class="btn btn-success mb-3" href="#" id="btnexportarconsulta"><em class="fas fa-download"></em> Exportar Consulta</a>
                                     <input type="hidden" name="id_obs" id="validobs">
                                 </div>
                             </div>
                         </form>
                         <div class="row">
-                            <div class="col-xl-8 col-sm-12 col-md-12">
+                            <div class="col-xl-12 col-sm-12 col-md-12">
                                 <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
                                     <thead class="bg-success">
                                         <th style="color: #fff">Ubicación</th>
@@ -138,6 +142,11 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+
+        $('#anio').on('focus', function() {
+            $('#btnconsultar').removeAttr("disabled");
+        });
+
         $('#tiposregistros').change(function() {
             $('#exportartiporeg').removeAttr("disabled");
         });
