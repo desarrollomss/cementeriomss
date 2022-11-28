@@ -20,9 +20,10 @@
                                 @csrf
                                 <div class="col-xl-3 col-sm-12 col-md-8">
                                     <input type="number" class="form-control" style="width: 100%;" name="anio" id="anio">
+                                    <span style="display: none;" id="errorcode" class="text-danger"></span>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-8">
-                                    <button type="submit" class="btn btn-success" disabled id="btnconsultar">CONSULTAR</button>
+                                    <button type="submit" class="btn btn-info" disabled id="btnconsultar" onclick="validarNumericos();">CONSULTAR</button>
                                 </div>
                                 @if (session()->has('rpta'))
                                 <div class="col-xl-6 col-sm-12 col-md-8">
@@ -63,11 +64,10 @@
                                     </select>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-12">
-                                    <button type="submit" class="btn btn-success" disabled="disabled" id="exportartiporeg"><em class="fas fa-download"></em> EXPORTAR</button>
+                                    <button type="submit" class="btn btn-info" disabled="disabled" id="exportartiporeg"><em class="fas fa-download"></em> EXPORTAR</button>
                                 </div>
                             </div>
                         </form>
-
 
                         <div class="row">
                             <div class="col-xl-12 col-sm-12 col-md-12">
@@ -86,10 +86,10 @@
                                     </select>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-2">
-                                    <button type="submit" class="btn btn-success" disabled="disabled" id="btnbuscar"><em class="fas fa-search"></em> BUSCAR</button>
+                                    <button type="submit" class="btn btn-info" disabled="disabled" id="btnbuscar"><em class="fas fa-search"></em> BUSCAR</button>
                                 </div>
                                 <div class="col-xl-3 col-sm-12 col-md-2 d-flex justify-content-end">
-                                    <a class="btn btn-success mb-3" href="#" id="btnexportarconsulta"><em class="fas fa-download"></em> Exportar Consulta</a>
+                                    <a class="btn btn-info mb-3" href="#" id="btnexportarconsulta"><em class="fas fa-download"></em> Exportar Consulta</a>
                                     <input type="hidden" name="id_obs" id="validobs">
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                         <div class="row">
                             <div class="col-xl-12 col-sm-12 col-md-12">
                                 <table class="table table-responsive table-hover table-striped mt-4" id="consulta">
-                                    <thead class="bg-success">
+                                    <thead class="bg-info">
                                         <th style="color: #fff">Ubicación</th>
                                         <th style="color: #fff">Nivel</th>
                                         <th style="color: #fff">Número</th>
@@ -193,18 +193,25 @@
             },
         });
 
-        function validarNumericos() {
-            if ($('#anio').val() > 9999) {
-                $('#errorcode').css("display", "block");
-                $('#anio').css("border", "1px solid red");
-                $('#anio').focus();
-                event.preventDefault();
-                return false;
-            } else {
-                return true;
-            }
-        }
-
     });
+
+    function validarNumericos() {
+        if ($('#anio').val() > 9999) {
+            $('#errorcode').css("display", "block");
+            $('#errorcode').text("Ingresa como máximo 4 dígitos para consultar");
+            $('#anio').css("border", "1px solid red");
+            $('#anio').focus();
+            event.preventDefault();
+            return false;
+        }else if($('#anio').val() < 999)
+        {
+            $('#errorcode').css("display", "block");
+            $('#errorcode').text("Ingresa como minimo 4 dígitos para consultar");
+            $('#anio').css("border", "1px solid red");
+            $('#anio').focus();
+            event.preventDefault();
+            return false;
+        }
+    }
 </script>
 @endsection
