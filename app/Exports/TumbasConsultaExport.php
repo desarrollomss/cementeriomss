@@ -2,12 +2,10 @@
 
 namespace App\Exports;
 
-use App\Models\Tumbas;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use stdClass;
 
 class TumbasConsultaExport implements FromCollection,WithHeadings
 {

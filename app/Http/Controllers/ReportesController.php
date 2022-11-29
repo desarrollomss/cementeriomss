@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RegistrosPorAnio;
 use App\Exports\TumbasExport;
 use App\Exports\TumbasConsultaExport;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class ReportesController extends Controller
     }
     public function registrosexportarconsulta($id)
     {
-        return Excel::download(new TumbasConsultaExport($id), 'filtro_tumbas.xls');;
+        return Excel::download(new TumbasConsultaExport($id), 'filtro_tumbas.xls');
     }
 
     public function registrosporanio(Request $request)
@@ -70,15 +71,17 @@ class ReportesController extends Controller
         ->whereYear('fecha_deceso',$anio)
         ->count();
 
-        $anioactual = (int)date("Y");
+        // $anioactual = (int)date("Y");
 
         if($registros > 0)
         {
-            $aniosdeceso = $anioactual - $anio;
-            $resp = 'Cantidad de Registros : '. $registros.' Tiempo de deceso : '. $aniosdeceso.' Años';
-            return back()->with('rpta',$resp);
+            // Excel::download(new RegistrosPorAnio($anio), 'filtro_años.xls');
+            // $aniosdeceso = $anioactual - $anio;
+            // $resp = 'Cantidad de Registros : '. $registros.' Tiempo de deceso : '. $aniosdeceso.' Años';
+            // return back()->with('rpta',$resp);
+            return Excel::download(new RegistrosPorAnio($anio), 'filtro_años.xls');
         }else{
-            $resp ="Sin Datos Para Esa Fecha";
+            $resp ="Sin Registros Para Esa Fecha";
             return back()->with('rpta',$resp);
         }
     }

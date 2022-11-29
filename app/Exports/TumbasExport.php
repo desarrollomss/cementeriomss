@@ -13,14 +13,6 @@ class TumbasExport implements FromCollection,WithHeadings
 {
     use Exportable;
 
-    private $busqueda;
-
-    public function exportarBusqueda($busqueda)
-    {
-        $this->busqueda = $busqueda;
-        return $this;
-    }
-
     public function headings(): array
     {
         return [
