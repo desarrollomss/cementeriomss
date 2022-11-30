@@ -89,8 +89,17 @@ class TumbasController extends Controller
 
     public function store(Request $request)
     {
-        $codigo = random_bytes(5);
-        $codcasteado = bin2hex($codigo);
+        // $codigo = random_bytes(5);
+        // $codcasteado = bin2hex($codigo);
+
+        $arreglocodigos[] = array();
+
+        for ($i = 0; $i < 1352; $i++) {
+            $codigo = random_bytes(5);
+            $codcasteado = bin2hex($codigo);
+            array_push($arreglocodigos,$codcasteado);
+        }
+        dd($arreglocodigos);
 
         $msn = "Registro Guardado Correctamente!";
 
@@ -241,7 +250,7 @@ class TumbasController extends Controller
     {
         $id = $request->id;
         $query = DB::select(DB::raw('select r.id, r.nombres, r.paterno, r.materno from registros r where id =' . $id));
-        return response()->json(['detalle'=>$query]);
+        return response()->json(['detalle' => $query]);
     }
 
     public function delete(Request $request)
