@@ -54,7 +54,7 @@
         </div>
     </div>
 </section>
-@include('tumbas.deta_modal')
+@include('deta_modal')
 @include('eliminar_modal')
 @endsection
 @section('scripts')
@@ -166,27 +166,27 @@
        },'json');
     });
 
-    $(document).on('click', '#modalTumbasDeta', function() {
+    $(document).on('click', '#modalDeta', function() {
         var id = $(this).data('id');
         var imgdefault = "{{asset('/imagen/default.png')}}";
         $.get('<?= route("detalle.tumbas") ?>', {
             id: id
         }, function(data) {
-            $('.tumbadetalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
-            $('.tumbadetalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
-            $('.tumbadetalle').find('input[name="materno"]').val(data.detalle[0].materno);
+            $('.detalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
+            $('.detalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
+            $('.detalle').find('input[name="materno"]').val(data.detalle[0].materno);
 
             if (data.detalle[0].fecha_deceso != null) {
                 let fecha = data.detalle[0].fecha_deceso;
                 let fsplit = fecha.split(' ');
                 let fformat = fsplit[0];
-                $('.tumbadetalle').find('input[name="fecha_deceso"]').val(fformat);
+                $('.detalle').find('input[name="fecha_deceso"]').val(fformat);
             } else {
-                $('.tumbadetalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
+                $('.detalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
             }
 
-            let obslista = $('.tumbadetalle').find('.obslista');
-            let adilista = $('.tumbadetalle').find('.adilista');
+            let obslista = $('.detalle').find('.obslista');
+            let adilista = $('.detalle').find('.adilista');
 
             if (data.obs != null) {
                 $('.obslista').empty();
@@ -208,11 +208,11 @@
             let imagen_uri = "{{ asset('imagen/{img}') }}";
             imagen_uri = imagen_uri.replace('{img}', imgdeta);
             if (data.detalle[0].imagen == '') {
-                $('.tumbadetalle').find("#imgdetalle").attr("src", `${imgdefault}`);
+                $('.detalle').find("#imgdetalle").attr("src", `${imgdefault}`);
             } else {
-                $('.tumbadetalle').find("#imgdetalle").attr("src", `${imagen_uri}`);
+                $('.detalle').find("#imgdetalle").attr("src", `${imagen_uri}`);
             }
-            $('.tumbadetalle').modal('show');
+            $('.detalle').modal('show');
         }, 'json');
     });
 </script>

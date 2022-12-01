@@ -53,7 +53,7 @@ class TumbasController extends Controller
             ->addColumn('ver', function ($row) {
                 if (auth()->user()->can('ver-registers')) {
                     return '<td>
-                                <button type="button" class="btn btn-success btn-sm" data-id="' . $row->id . '" id="modalTumbasDeta"><em class="fas fa-eye"></em></button>
+                                <button type="button" class="btn btn-success btn-sm" data-id="' . $row->id . '" id="modalDeta"><em class="fas fa-eye"></em></button>
                             </td>';
                 }
             })

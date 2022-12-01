@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TumbasController;
-use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\MausoleosController;
 use App\Http\Controllers\ReportesController;
-use Faker\Guesser\Name;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +46,11 @@ Route::group(['middleware'=>['auth']],function () {
     Route::put('/cementerio/registros/{id}/update',[TumbasController::class, 'update'])->name('tumbas.update');
     Route::get('detalleeliminar',[TumbasController::class, 'detalleeliminar'])->name('detalle.eliminar');
     Route::post('/cementerio/registros/delete',[TumbasController::class, 'delete'])->name('tumbas.delete');
+
+    // Rutas para MODULO TUMBAS
+    Route::get('/cementerio/registros/mausoleos', [MausoleosController::class, 'index'])->name('mausoleos.index');
+    Route::get('obtenermausoleos', [MausoleosController::class, 'obtenermausoleos'])->name('obtener.mausoleos');
+
 
     //RUTAS para REPORTES
     Route::get('/cementerio/reportes',[ReportesController::class, 'index'])->name('reportes.general');

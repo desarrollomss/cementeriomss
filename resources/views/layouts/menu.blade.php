@@ -32,8 +32,8 @@
         <i class="fas fa-hospital-alt"></i><span>Cuarteles</span>
     </a>
 </li>
-<li class="side-menus {{ Request::is('home') ? 'active' : '' }}">
-    <a class="nav-link" href="{{url('/home')}}">
+<li class="side-menus {{ Request::is('cementerio/registros/mausoleos') ? 'active' : '' }}">
+    <a class="nav-link" href="{{route('mausoleos.index')}}">
         <i class="fas fa-clinic-medical"></i><span>Mausoleos</span>
     </a>
 </li>

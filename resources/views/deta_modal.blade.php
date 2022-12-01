@@ -38,7 +38,7 @@
         color: #000;
     }
 </style>
-<div class="modal fade tumbadetalle" id="tumbasdeta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade detalle" id="deta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

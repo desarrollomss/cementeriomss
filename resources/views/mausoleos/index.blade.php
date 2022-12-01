@@ -1,149 +1,220 @@
 @extends('layouts.app')
-
 @section('content')
-    <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">Registros de Mausoleos</h3>
-        </div>
-        <div class="section-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    @can('crear-registers')
-                                        <a class="btn btn-info mb-3" href="{{ route('mausoleos.create') }}"><em
-                                                class="fas fa-check-square"></em> Nuevo registro</a>
-                                    @endcan
-                                </div>
-                                <div class="col">
-                                    <a class="btn btn-primary mb-3" href="{{ route('exportarMausoleos') }}">Exportar a
-                                        Excel</a>
-                                </div>
-                                <form action="{{ route('mausoleos.index') }}" class="mr-3" method="GET">
-                                    <div class="form-row">
-                                        <div class="col">
-                                            <input type="text" class="form-control" name="texto" placeholder="Buscar..."
-                                                value="{{ $texto }}" onkeyup="mayus(this);">
-                                        </div>
-                                        <div class="col">
-                                            <input type="submit" class="btn btn-warning mt-1" value="Buscar">
-                                            <a href="{{ route('mausoleos.index') }}" class="btn btn-info mt-1">Limpiar</a>
-                                        </div>
-                                    </div>
-                                </form>
+<section class="section">
+    <div class="section-header">
+        <h3 class="page__heading">Listado de Mausoleos</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                @can('crear-registers')
+                                <a class="btn btn-info mb-3" href="#"><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                @endcan
                             </div>
-                            <table class="table table-responsive table-hover table-striped mt-2">
-                                <thead class="bg-success">
-                                    <th style="color: #fff">Ubicación</th>
-                                    <th style="color: #fff">Nivel</th>
-                                    <th style="color: #fff">Nro</th>
-                                    <th style="color: #fff">Nombres</th>
-                                    <th style="color: #fff">A. Paterno</th>
-                                    <th style="color: #fff">A. Materno</th>
-                                    <th style="color: #fff">Fecha Deceso</th>
-                                    <th style="color: #fff">Observ</th>
-                                    @can('ver-registers')
-                                        <th style="color: #fff">Ver</th>
-                                    @endcan
-                                    @can('editar-registers')
-                                        <th style="color: #fff">Editar</th>
-                                    @endcan
-                                    @can('borrar-registers')
-                                        <th style="color: #fff">Eliminar</th>
-                                    @endcan
-                                </thead>
-                                <tbody>
-                                        @foreach ($mausoleos as $mausoleo)
-                                            <tr>
-                                                <td>{{ $mausoleo->ubicacion }}</td>
-                                                <td>{{ $mausoleo->nivel }}</td>
-                                                <td>{{ $mausoleo->numero }}</td>
-                                                <td>{{ $mausoleo->nombres }}</td>
-                                                <td>{{ $mausoleo->ap_paterno }}</td>
-                                                <td>{{ $mausoleo->ap_materno }}</td>
-                                                <td>{{ $mausoleo->fecha_deceso }}</td>
-                                                <td>{{ $mausoleo->obs }}</td>
-                                                <td width="200px">
-                                                    @can('ver-registers')
-                                                        <a class="btn btn-success"
-                                                            href="{{ route('mausoleos.show', $mausoleo->id) }}">
-                                                            <em class="fas fa-eye"></em>
-                                                        </a>
-                                                    @endcan
-                                                </td>
-                                                <td style="width: 200px">
-                                                    @can('editar-registers')
-                                                        <a class="btn btn-info"
-                                                            href="{{ route('mausoleos.edit', $mausoleo->id) }}"><i
-                                                                class="fas fa-user-edit"></i></a>
-                                                    @endcan
-                                                </td>
-                                                <td style="width: 200px">
-                                                    @can('borrar-registers')
-                                                        <form action="{{ route('mausoleos.destroy', $mausoleo->id) }}"
-                                                            method="POST" style="display:inline" class="frmDelete">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger text-light"><i
-                                                                    class="fas fa-user-slash"></i></button>
-                                                        </form>
-                                                    @endcan
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                </tbody>
-                            </table>
-                            <table class="table table-responsive mt-2 d-flex justify-content">
-                                <td colspan="8">
-                                    {{ $mausoleos->appends(['texto' => $texto])->links() }}
-                                </td>
-                            </table>
                         </div>
+
+                        @if (session()->has('success'))
+                        <div class="alert alert-info alert-dismissible fade show mensaje" role="alert">
+                            <strong>{{ session()->get('success') }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
+                        <table class="table table-responsive table-hover table-striped mt-2" id="mausoleos">
+                            <thead class="bg-success">
+                                <th style="color: #fff">Nombres</th>
+                                <th style="color: #fff">A.Paterno</th>
+                                <th style="color: #fff">A.Materno</th>
+                                <th style="color: #fff">Codigo</th>
+                                <th style="color: #fff">Nivel</th>
+                                <th style="color: #fff">Nro</th>
+                                <th style="color: #fff">Ubicación</th>
+                                <th style="color: #fff">Fecha Deceso</th>
+                                @can('ver-registers')
+                                <th style="color: #fff">Ver</th>
+                                @endcan
+                                @can('editar-registers')
+                                <th style="color: #fff">Editar</th>
+                                @endcan
+                                @can('borrar-registers')
+                                <th style="color: #fff">Borrar</th>
+                                @endcan
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+@include('deta_modal')
+@include('eliminar_modal')
 @endsection
 @section('scripts')
-    <script>
-        $('.frmDelete').submit(function(e) {
-            e.preventDefault();
-            swal({
-                    title: 'Seguro de eliminar?',
-                    text: "Si eliminas este registro no podrás recuperarlo",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttons: true,
-                    buttons: {
-                        cancel: 'No, eliminar',
-                        confirm: "Si, Eliminar",
-                    },
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        this.submit();
-                        swal("El registro se elimino de la base de datos", {
-                            icon: "success",
-                        });
-                    }
-                });
-        });
-        $(document).ready(function(e) {
-            $('#imagen').change(function() {
-                let reader = new FileReader();
-                reader.onload = (e) => {
-                    $('#imagenSeleccionada').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(this.files[0]);
-            });
-        });
 
-        function mayus(e) {
-            e.value = e.value.toUpperCase();
-        }
-    </script>
+<script>
+    $(document).ready(function(e) {
+
+        setTimeout(function() {
+            $(".mensaje").fadeOut(1500);
+        }, 1500);
+
+        $('#imagen').change(function() {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('#imagenSeleccionada').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    });
+
+    function mayus(e) {
+        e.value = e.value.toUpperCase();
+    }
+
+
+    $(document).ready(function() {
+        $('#mausoleos').DataTable({
+            proccesing: true,
+            info: true,
+            "order": [
+                [0, "asc"]
+            ],
+            responsive: true,
+            autoWidth: false,
+            processing: true,
+            info: true,
+            "pageLength": 100,
+            "aLengthMenu": [
+                [100, 150, 250, 300, 350, -1],
+                [100, 150, 250, 300, 350, "Todos"]
+            ],
+            "ajax": "{{route('obtener.mausoleos')}}",
+            "columns": [{
+                    data: 'nombres'
+                },
+                {
+                    data: 'paterno'
+                },
+                {
+                    data: 'materno'
+                },
+                {
+                    data: 'codigo'
+                },
+                {
+                    data: 'nivel'
+                },
+                {
+                    data: 'numero'
+                },
+                {
+                    data: 'ubicacion'
+                },
+                {
+                    data: 'fecha_deceso'
+                },
+
+                {
+                    data: 'ver'
+                },
+                {
+                    data: 'editar'
+                },
+                {
+                    data: 'borrar'
+                }
+            ],
+            "language": {
+                "lengthMenu": "Mostrar " +
+                    `<select class="custom-select custom-select-sm form-control form-control-sm">
+                            <option value='100'>100</option>
+                            <option value='150'>150</option>
+                            <option value='200'>200</option>
+                            <option value='250'>250</option>
+                            <option value='300'>300</option>
+                            <option value='-1'>Todos</option>
+                        </select>` +
+                    " registros por página",
+                "zeroRecords": "Sin Resultados Actualmente",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Sin Resultados",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar: ",
+                "paginate": {
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        });
+    });
+
+    $(document).on('click','#eliminar', function(){
+       var id = $(this).data('id');
+       $.get('<?= route("detalle.eliminar")?>',{
+        id:id
+       },function(data){
+        $('.eliminar').find('input[name="id"]').val(data.detalle[0].id);
+        $('.eliminar').find('.nombre').text(`${data.detalle[0].nombres} ${data.detalle[0].paterno} ${data.detalle[0].materno}`);
+       },'json');
+    });
+
+    $(document).on('click', '#modalDeta', function() {
+        var id = $(this).data('id');
+        var imgdefault = "{{asset('/imagen/default.png')}}";
+        $.get('<?= route("detalle.tumbas") ?>', {
+            id: id
+        }, function(data) {
+            $('.detalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
+            $('.detalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
+            $('.detalle').find('input[name="materno"]').val(data.detalle[0].materno);
+
+            if (data.detalle[0].fecha_deceso != null) {
+                let fecha = data.detalle[0].fecha_deceso;
+                let fsplit = fecha.split(' ');
+                let fformat = fsplit[0];
+                $('.detalle').find('input[name="fecha_deceso"]').val(fformat);
+            } else {
+                $('.detalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
+            }
+
+            let obslista = $('.detalle').find('.obslista');
+            let adilista = $('.detalle').find('.adilista');
+
+            if (data.obs != null) {
+                $('.obslista').empty();
+                for (let index = 0; index < data.obs.length; index++) {
+                    const element = data.obs[index].observacion;
+                    obslista.append(`<li>${element}</li>`);
+                }
+            }
+
+            if (data.ads != null) {
+                $('.adilista').empty();
+                for (let index = 0; index < data.ads.length; index++) {
+                    const element = data.ads[index].adicional;
+                    adilista.append(`<li>${element}</li>`);
+                }
+            }
+
+            let imgdeta = data.detalle[0].imagen;
+            let imagen_uri = "{{ asset('imagen/{img}') }}";
+            imagen_uri = imagen_uri.replace('{img}', imgdeta);
+            if (data.detalle[0].imagen == '') {
+                $('.detalle').find("#imgdetalle").attr("src", `${imgdefault}`);
+            } else {
+                $('.detalle').find("#imgdetalle").attr("src", `${imagen_uri}`);
+            }
+            $('.detalle').modal('show');
+        }, 'json');
+    });
+</script>
+
 @endsection
