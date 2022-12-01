@@ -89,17 +89,8 @@ class TumbasController extends Controller
 
     public function store(Request $request)
     {
-        // $codigo = random_bytes(5);
-        // $codcasteado = bin2hex($codigo);
-
-        $arreglocodigos[] = array();
-
-        for ($i = 0; $i < 1352; $i++) {
-            $codigo = random_bytes(5);
-            $codcasteado = bin2hex($codigo);
-            array_push($arreglocodigos,$codcasteado);
-        }
-        dd($arreglocodigos);
+        $codigo = random_bytes(5);
+        $codcasteado = bin2hex($codigo);
 
         $msn = "Registro Guardado Correctamente!";
 

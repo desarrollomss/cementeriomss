@@ -27,16 +27,16 @@
     </li>
 @endcan
 @can('ver-registers')
-<!-- <li class="side-menus {{ Request::is('cuarteles') ? 'active' : '' }}">
-    <a class="nav-link" href="{{url('/cuarteles')}}">
+<li class="side-menus {{ Request::is('home') ? 'active' : '' }}">
+    <a class="nav-link" href="{{url('/home')}}">
         <i class="fas fa-hospital-alt"></i><span>Cuarteles</span>
     </a>
-</li> -->
-<!-- <li class="side-menus {{ Request::is('mausoleos') ? 'active' : '' }}">
-    <a class="nav-link" href="{{url('/mausoleos')}}">
+</li>
+<li class="side-menus {{ Request::is('home') ? 'active' : '' }}">
+    <a class="nav-link" href="{{url('/home')}}">
         <i class="fas fa-clinic-medical"></i><span>Mausoleos</span>
     </a>
-</li>-->
+</li>
 <li class="side-menus {{ Request::is('cementerio/registros/tumbas') ? 'active' : '' }}">
     <a class="nav-link" href="{{route('tumbas.index')}}">
         <i class="fas fa-cross"></i><span>Tumbas</span>
