@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col">
                                 @can('crear-registers')
-                                <a class="btn btn-info mb-3" href="#"><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                <a class="btn btn-info mb-3" href="{{route('mausoleos.create')}}"><em class="fas fa-check-square"></em> Nuevo registro</a>
                                 @endcan
                             </div>
                         </div>
@@ -169,7 +169,7 @@
     $(document).on('click', '#modalDeta', function() {
         var id = $(this).data('id');
         var imgdefault = "{{asset('/imagen/default.png')}}";
-        $.get('<?= route("detalle.tumbas") ?>', {
+        $.get('<?= route("detalle.mausoleos") ?>', {
             id: id
         }, function(data) {
             $('.detalle').find('input[name="nombres"]').val(data.detalle[0].nombres);

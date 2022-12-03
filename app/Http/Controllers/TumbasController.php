@@ -60,7 +60,7 @@ class TumbasController extends Controller
             ->addColumn('editar', function ($row) {
                 if (auth()->user()->can('editar-registers')) {
                     return '<td>
-                            <a href="/cementerio/registros/' . $row->id . '/edit" class="btn btn-info btn-sm"><i
+                            <a href="/cementerio/registros/' . $row->id . '/edit/tumbas" class="btn btn-info btn-sm"><i
                                 class="fas fa-user-edit"></i></a>
                             </td>';
                 }
@@ -113,6 +113,7 @@ class TumbasController extends Controller
         $registro->nombres = $request->nombres;
         $registro->paterno = $request->paterno;
         $registro->materno = $request->materno;
+        $registro->imagen = $request->imagen;
         $registro->fecha_deceso = $request->fecha_deceso;
         $registro->ip_usuario = request()->ip();
         $registro->nombre_usuario = Auth::user()->name;
@@ -124,6 +125,8 @@ class TumbasController extends Controller
             $imgRegis = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($rutaGaurdada, $imgRegis);
             $registro['imagen'] = "$imgRegis";
+        } else {
+            $registro->imagen = 'default.png';
         }
 
         $registro->save();
@@ -210,6 +213,7 @@ class TumbasController extends Controller
         $registro->nombres = $request->nombres;
         $registro->paterno = $request->paterno;
         $registro->materno = $request->materno;
+        $registro->imagen = $request->imagen;
         $registro->fecha_deceso = $request->fecha_deceso;
         $registro->ip_usuario = request()->ip();
         $registro->usuario_modificador = Auth::user()->name;

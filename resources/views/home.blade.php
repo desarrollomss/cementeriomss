@@ -3,9 +3,9 @@
 @section('content')
 @php
 use App\Models\Registros;
-$contTumbas = Registros::where('id_tipo_reg',3)->count();
-$contMausoleos = Registros::where('id_tipo_reg',2)->count();
-$conCuarteles = Registros::where('id_tipo_reg',1)->count();
+$contTumbas = Registros::where('id_tipo_reg',3)->whereNull('deleted_at')->count();
+$contMausoleos = Registros::where('id_tipo_reg',2)->whereNull('deleted_at')->count();
+$conCuarteles = Registros::where('id_tipo_reg',1)->whereNull('deleted_at')->count();
 @endphp
 <section class="section">
     <div class="section-header">
