@@ -46,7 +46,7 @@ $conCuarteles = Registros::where('id_tipo_reg',1)->whereNull('deleted_at')->coun
                                                     <i class="fas fa-clinic-medical font-large-2 float-left" style="font-size:35px"></i>
                                                 </div>
                                                 <div class="media-body text-right">
-                                                    <a href="mausoleos" class="text-white text-decoration-none">
+                                                    <a href="{{route('mausoleos.index')}}" class="text-white text-decoration-none">
                                                         <h1>{{$contMausoleos}}</h1>
                                                         Mausoleos
                                                     </a>
