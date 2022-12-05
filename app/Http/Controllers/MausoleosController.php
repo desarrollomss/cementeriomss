@@ -179,4 +179,96 @@ class MausoleosController extends Controller
 
         return response()->json(['detalle' => $query, 'obs' => $queryobs, 'ads' => $queryads]);
     }
+
+    public function edit($id)
+    {
+        $registro = Registros::find($id);
+        $niveles = DB::table('c_niveles')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'M-%')->select('id', 'codigo', 'descripcion')->orderBy('descripcion', 'asc')->get();
+
+        $obsreg = DB::table('observaciones_registros')->where('observaciones_registros.registros_id', $id)->pluck('observaciones_registros.observaciones_id', 'observaciones_registros.observaciones_id')->all();
+
+        $observaciones = DB::table('c_observaciones')->get();
+
+        $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.registros_id', $id)->pluck('adicionales_registros.adicionales_id', 'adicionales_registros.adicionales_id')->all();
+
+        $adicionales = DB::table('c_adicionales')->get();
+        return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $msn = "Registro Actualizado Correctamente!";
+        $registro = Registros::find($id);
+
+        $this->validate($request, [
+            'nivel' => 'required',
+            'ubicacion' => 'required',
+            'numero' => 'required',
+            'nombres' => 'required',
+            'paterno' => 'required',
+            'materno' => 'required',
+            'imagen' => 'image:jpeg,jpg,png|max:3072'
+        ]);
+
+        $registro->id_tipo_reg = $request->tiporegistro;
+        $registro->id_nivel = $request->nivel;
+        $registro->id_ubicacion = $request->ubicacion;
+        $registro->numero = $request->numero;
+        $registro->nombres = $request->nombres;
+        $registro->paterno = $request->paterno;
+        $registro->materno = $request->materno;
+        $registro->imagen = $request->imagen;
+        $registro->fecha_deceso = $request->fecha_deceso;
+        $registro->ip_usuario = request()->ip();
+        $registro->usuario_modificador = Auth::user()->name;
+        $registro->deleted_at = null;
+
+        if ($request->imagen != null) {
+            if ($image = $request->file('imagen')) {
+                $rutaGaurdada = 'imagen/';
+                $imgRegis = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($rutaGaurdada, $imgRegis);
+                $registro['imagen'] = "$imgRegis";
+            }
+        } else {
+            $registro->imagen = 'default.png';
+        }
+
+        $observ = $request->observaciones;
+        $adicio = $request->adicionales;
+
+        $registro->observaciones()->sync($observ);
+        $registro->adicionales()->sync($adicio);
+
+        $registro->save();
+
+        return redirect()->route('tumbas.index')->with('success', $msn);
+    }
+
+    public function detalleeliminar(Request $request)
+    {
+        $id = $request->id;
+        $query = DB::select(DB::raw('select r.id, r.nombres, r.paterno, r.materno from registros r where id =' . $id));
+        return response()->json(['detalle' => $query]);
+    }
+
+    public function delete(Request $request)
+    {
+        $msn = "Registro Eliminado!";
+
+        $registro = Registros::find($request->id);
+
+        if (!is_null($registro)) {
+            $registro->usuario_modificador = Auth::user()->name;
+            $registro->deleted_at = Carbon::now()->toDateTimeString();
+            $registro->ip_usuario = request()->ip();
+            $registro->update();
+            return back()->with('success', $msn);
+        } else {
+            $msn = 'No Se Elimino El Registro ¡Error!';
+            return back()->with('error', $msn);
+        }
+    }
 }

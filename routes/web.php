@@ -29,9 +29,10 @@ Route::get('/register', function(){
     return view('auth.login');
 });
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware'=>['auth']],function () {
     Route::resource('roles', RolController::class);
@@ -54,6 +55,11 @@ Route::group(['middleware'=>['auth']],function () {
     Route::get('/cementerio/registros/crear/mausoleos',[MausoleosController::class, 'create'])->name('mausoleos.create');
     Route::post('/cementerio/registros/crear/mausoleos',[MausoleosController::class,'store'])->name('mausoleos.store');
     Route::get('detallemausoleos',[MausoleosController::class, 'detallemausoleos'])->name('detalle.mausoleos');
+
+    Route::get('/cementerio/registros/{id}/edit/mausoleos',[MausoleosController::class, 'edit'])->name('mausoleos.edit');
+    Route::put('/cementerio/registros/{id}/update/mausoleos',[MausoleosController::class, 'update'])->name('mausoleos.update');
+    Route::get('detalleeliminar',[MausoleosController::class, 'detalleeliminar'])->name('detalle.eliminar');
+    Route::post('/cementerio/registros/delete/mausoleos',[MausoleosController::class, 'delete'])->name('mausoleos.delete');
 
 
 
