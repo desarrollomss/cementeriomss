@@ -80,7 +80,7 @@ class MausoleosController extends Controller
     public function create()
     {
         $niveles = DB::table('c_niveles')->where('codigo', 'like', 'G')->get();
-        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'M-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'M-%')->select('id', 'codigo', 'descripcion')->orderBy('descripcion', 'asc')->get();
         $observaciones = DB::table('c_observaciones')->get();
         $adicionales = DB::table('c_adicionales')->get();
         return view('mausoleos.crear', compact('observaciones', 'niveles', 'ubicacion', 'adicionales'));
@@ -88,8 +88,16 @@ class MausoleosController extends Controller
 
     public function store(Request $request)
     {
-        $codigo = random_bytes(5);
-        $codcasteado = bin2hex($codigo);
+        $arreglo[] = array();
+
+        for ($i=0; $i < 17332; $i++) {
+            $codigo = random_bytes(5);
+            $codcasteado = bin2hex($codigo);
+            array_push($arreglo,$codcasteado);
+        }
+
+        dd($arreglo);
+
 
         $msn = "Registro Guardado Correctamente!";
 
