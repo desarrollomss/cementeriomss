@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TumbasController;
-
 use App\Http\Controllers\MausoleosController;
+use App\Http\Controllers\CuartelesController;
 use App\Http\Controllers\ReportesController;
 
 /*
@@ -49,18 +49,27 @@ Route::group(['middleware'=>['auth']],function () {
     Route::get('detalleeliminar',[TumbasController::class, 'detalleeliminar'])->name('detalle.eliminar');
     Route::post('/cementerio/registros/delete/tumbas',[TumbasController::class, 'delete'])->name('tumbas.delete');
 
-    // Rutas para MODULO TUMBAS
+    // Rutas para MODULO MAUSOLEOS
     Route::get('/cementerio/registros/mausoleos', [MausoleosController::class, 'index'])->name('mausoleos.index');
     Route::get('obtenermausoleos', [MausoleosController::class, 'obtenermausoleos'])->name('obtener.mausoleos');
     Route::get('/cementerio/registros/crear/mausoleos',[MausoleosController::class, 'create'])->name('mausoleos.create');
     Route::post('/cementerio/registros/crear/mausoleos',[MausoleosController::class,'store'])->name('mausoleos.store');
     Route::get('detallemausoleos',[MausoleosController::class, 'detallemausoleos'])->name('detalle.mausoleos');
-
     Route::get('/cementerio/registros/{id}/edit/mausoleos',[MausoleosController::class, 'edit'])->name('mausoleos.edit');
     Route::put('/cementerio/registros/{id}/update/mausoleos',[MausoleosController::class, 'update'])->name('mausoleos.update');
     Route::get('detalleeliminar',[MausoleosController::class, 'detalleeliminar'])->name('detalle.eliminar');
     Route::post('/cementerio/registros/delete/mausoleos',[MausoleosController::class, 'delete'])->name('mausoleos.delete');
 
+    // Rutas para MODULO CUARTELES
+    Route::get('/cementerio/registros/cuarteles', [CuartelesController::class, 'index'])->name('cuarteles.index');
+    Route::get('obtenercuarteles', [CuartelesController::class, 'obtenercuarteles'])->name('obtener.cuarteles');
+    Route::get('/cementerio/registros/crear/cuarteles',[CuartelesController::class, 'create'])->name('cuarteles.create');
+    Route::post('/cementerio/registros/crear/cuarteles',[CuartelesController::class,'store'])->name('cuarteles.store');
+    Route::get('detallecuarteles',[CuartelesController::class, 'detallecuarteles'])->name('detalle.cuarteles');
+    Route::get('/cementerio/registros/{id}/edit/cuarteles',[CuartelesController::class, 'edit'])->name('cuarteles.edit');
+    Route::put('/cementerio/registros/{id}/update/cuarteles',[CuartelesController::class, 'update'])->name('cuarteles.update');
+    Route::get('detalleeliminar',[CuartelesController::class, 'detalleeliminar'])->name('detalle.eliminar');
+    Route::post('/cementerio/registros/delete/cuarteles',[CuartelesController::class, 'delete'])->name('cuarteles.delete');
 
 
     //RUTAS para REPORTES

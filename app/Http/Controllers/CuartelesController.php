@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
+use App\Models\Registros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Registros;
-use Carbon\Carbon;
 
-class TumbasController extends Controller
+class CuartelesController extends Controller
 {
     function __construct()
     {
@@ -21,19 +21,19 @@ class TumbasController extends Controller
     public function index()
     {
         $observaciones = DB::table('c_observaciones')->get();
-        $niveles = DB::table('c_niveles')->get();
-        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'T-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
+        $niveles = DB::table('c_niveles')->where('codigo', 'like', 'G')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'C-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.index', compact('observaciones', 'niveles', 'ubicacion', 'adicionales'));
+        return view('cuarteles.index', compact('observaciones', 'niveles', 'ubicacion', 'adicionales'));
     }
 
-    public function obtenertumbas()
+    public function obtenercuarteles()
     {
         $query = DB::table('registros')
             ->join('c_tipo_registros as ctr', 'registros.id_tipo_reg', '=', 'ctr.id')
             ->join('c_niveles as cn', 'registros.id_nivel', '=', 'cn.id')
             ->join('c_ubicaciones as cu', 'registros.id_ubicacion', '=', 'cu.id')
-            ->where('cu.codigo', 'like', 'T-%')
+            ->where('cu.codigo', 'like', 'C-%')
             ->whereNull('deleted_at')
             ->select('registros.id', 'cu.codigo', 'cu.descripcion as ubicacion', 'cn.descripcion as nivel', 'registros.numero', 'registros.nombres', 'registros.paterno', 'registros.materno', 'registros.fecha_deceso', 'registros.imagen')
             ->orderBy('registros.id', 'desc');
@@ -60,7 +60,7 @@ class TumbasController extends Controller
             ->addColumn('editar', function ($row) {
                 if (auth()->user()->can('editar-registers')) {
                     return '<td>
-                            <a href="/cementerio/registros/' . $row->id . '/edit/tumbas" class="btn btn-info btn-sm"><i
+                            <a href="/cementerio/registros/' . $row->id . '/edit/cuarteles" class="btn btn-info btn-sm"><i
                                 class="fas fa-user-edit"></i></a>
                             </td>';
                 }
@@ -80,11 +80,11 @@ class TumbasController extends Controller
 
     public function create()
     {
-        $niveles = DB::table('c_niveles')->get();
-        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'T-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
+        $niveles = DB::table('c_niveles')->where('codigo', 'like', 'G')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'C-%')->select('id', 'codigo', 'descripcion')->orderBy('descripcion', 'asc')->get();
         $observaciones = DB::table('c_observaciones')->get();
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.crear', compact('observaciones', 'niveles', 'ubicacion', 'adicionales'));
+        return view('cuarteles.crear', compact('observaciones', 'niveles', 'ubicacion', 'adicionales'));
     }
 
     public function store(Request $request)
@@ -148,10 +148,10 @@ class TumbasController extends Controller
             }
         }
 
-        return redirect()->route('tumbas.index')->with('success', $msn);
+        return redirect()->route('cuarteles.index')->with('success', $msn);
     }
 
-    public function detalletumbas(Request $request)
+    public function detallecuarteles(Request $request)
     {
         $id = $request->id;
         $query = DB::select(DB::raw('select r.nombres ,r.paterno ,r.materno ,r.numero , r.fecha_deceso, r.imagen from registros r where id =' . $id));
@@ -173,14 +173,13 @@ class TumbasController extends Controller
         return response()->json(['detalle' => $query, 'obs' => $queryobs, 'ads' => $queryads]);
     }
 
-
     public function edit($id)
     {
         $registro = Registros::find($id);
 
-        $niveles = DB::table('c_niveles')->select('id', 'descripcion')->orderBy('descripcion', 'asc')->get();
+        $niveles = DB::table('c_niveles')->get();
 
-        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'T-%')->select('id', 'codigo', 'descripcion')->orderBy('codigo', 'asc')->get();
+        $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'C-%')->select('id', 'codigo', 'descripcion')->orderBy('descripcion', 'asc')->get();
 
         $obsreg = DB::table('observaciones_registros')->where('observaciones_registros.registros_id', $id)->pluck('observaciones_registros.observaciones_id', 'observaciones_registros.observaciones_id')->all();
 
@@ -189,7 +188,7 @@ class TumbasController extends Controller
         $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.registros_id', $id)->pluck('adicionales_registros.adicionales_id', 'adicionales_registros.adicionales_id')->all();
 
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
+        return view('cuarteles.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
     }
 
     public function update(Request $request, $id)
@@ -240,7 +239,7 @@ class TumbasController extends Controller
 
         $registro->save();
 
-        return redirect()->route('tumbas.index')->with('success', $msn);
+        return redirect()->route('cuarteles.index')->with('success', $msn);
     }
 
     public function detalleeliminar(Request $request)

@@ -1,9 +1,8 @@
 @extends('layouts.app')
-
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Listado de Cuarteles</h3>
+        <h3 class="page__heading">Listado de Tumbas</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -13,21 +12,29 @@
                         <div class="row">
                             <div class="col">
                                 @can('crear-registers')
-                                <a class="btn btn-info mb-3" href="#"><em class="fas fa-check-square"></em> Nuevo registro</a>
+                                <a class="btn btn-info mb-3" href="{{ route('cuarteles.create') }}"><em class="fas fa-check-square"></em> Nuevo registro</a>
                                 @endcan
                             </div>
                         </div>
 
+                        @if (session()->has('success'))
+                        <div class="alert alert-info alert-dismissible fade show mensaje" role="alert">
+                            <strong>{{ session()->get('success') }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         <table class="table table-responsive table-hover table-striped mt-2" id="cuarteles">
                             <thead class="bg-success">
-                                <th style="color: #fff">Ubicación</th>
+                                <th style="color: #fff">Nombres</th>
+                                <th style="color: #fff">A.Paterno</th>
+                                <th style="color: #fff">A.Materno</th>
+                                <th style="color: #fff">Codigo</th>
                                 <th style="color: #fff">Nivel</th>
                                 <th style="color: #fff">Nro</th>
-                                <th style="color: #fff">Nombres</th>
-                                <th style="color: #fff">A. Paterno</th>
-                                <th style="color: #fff">A. Materno</th>
+                                <th style="color: #fff">Ubicación</th>
                                 <th style="color: #fff">Fecha Deceso</th>
-                                <th style="color: #fff">Observacion</th>
                                 @can('ver-registers')
                                 <th style="color: #fff">Ver</th>
                                 @endcan
@@ -35,7 +42,7 @@
                                 <th style="color: #fff">Editar</th>
                                 @endcan
                                 @can('borrar-registers')
-                                <th style="color: #fff">Eliminar</th>
+                                <th style="color: #fff">Borrar</th>
                                 @endcan
                             </thead>
                             <tbody>
@@ -47,34 +54,18 @@
         </div>
     </div>
 </section>
+@include('deta_modal')
+@include('eliminar_modal')
 @endsection
 @section('scripts')
-<script>
-    $('.frmDelete').submit(function(e) {
-        e.preventDefault();
-        swal({
-                title: 'Seguro de eliminar?',
-                text: "Si eliminas este registro no podrás recuperarlo",
-                icon: "warning",
-                showCancelButton: true,
-                buttons: true,
-                buttons: {
-                    cancel: 'No, eliminar',
-                    confirm: "Si, Eliminar",
-                },
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    this.submit();
-                    swal("El registro se elimino de la base de datos", {
-                        icon: "success",
-                    });
-                }
-            });
-    });
 
+<script>
     $(document).ready(function(e) {
+
+        setTimeout(function() {
+            $(".mensaje").fadeOut(1500);
+        }, 1500);
+
         $('#imagen').change(function() {
             let reader = new FileReader();
             reader.onload = (e) => {
@@ -94,24 +85,19 @@
             proccesing: true,
             info: true,
             "order": [
-                [0, "desc"]
+                [0, "asc"]
             ],
             responsive: true,
             autoWidth: false,
             processing: true,
             info: true,
-            "pageLength": 50,
+            "pageLength": 200,
+            "aLengthMenu": [
+                [200, 300, 400, 500, 1000, -1],
+                [200, 300, 400, 500, 1000, "Todos"]
+            ],
             "ajax": "{{route('obtener.cuarteles')}}",
             "columns": [{
-                    data: 'ubicacion'
-                },
-                {
-                    data: 'nivel'
-                },
-                {
-                    data: 'numero'
-                },
-                {
                     data: 'nombres'
                 },
                 {
@@ -121,11 +107,21 @@
                     data: 'materno'
                 },
                 {
-                    data: 'fecha_deceso'
+                    data: 'codigo'
                 },
                 {
-                    data: 'observaciones'
+                    data: 'nivel'
                 },
+                {
+                    data: 'numero'
+                },
+                {
+                    data: 'ubicacion'
+                },
+                {
+                    data: 'fecha_deceso'
+                },
+
                 {
                     data: 'ver'
                 },
@@ -133,17 +129,17 @@
                     data: 'editar'
                 },
                 {
-                    data: 'eliminar'
+                    data: 'borrar'
                 }
             ],
             "language": {
                 "lengthMenu": "Mostrar " +
                     `<select class="custom-select custom-select-sm form-control form-control-sm">
-                            <option value='5'>50</option>
-                            <option value='10'>100</option>
-                            <option value='15'>150</option>
-                            <option value='20'>200</option>
-                            <option value='25'>250</option>
+                            <option value='200'>200</option>
+                            <option value='300'>300</option>
+                            <option value='400'>400</option>
+                            <option value='500'>500</option>
+                            <option value='1000'>1000</option>
                             <option value='-1'>Todos</option>
                         </select>` +
                     " registros por página",
@@ -159,5 +155,66 @@
             },
         });
     });
+
+    $(document).on('click','#eliminar', function(){
+       var id = $(this).data('id');
+       $.get('<?= route("detalle.eliminar")?>',{
+        id:id
+       },function(data){
+        $('.eliminar').find('input[name="id"]').val(data.detalle[0].id);
+        $('.eliminar').find('.nombre').text(`${data.detalle[0].nombres} ${data.detalle[0].paterno} ${data.detalle[0].materno}`);
+       },'json');
+    });
+
+    $(document).on('click', '#modalDeta', function() {
+        var id = $(this).data('id');
+        var imgdefault = "{{asset('/imagen/default.png')}}";
+        $.get('<?= route("detalle.tumbas") ?>', {
+            id: id
+        }, function(data) {
+            $('.detalle').find('input[name="nombres"]').val(data.detalle[0].nombres);
+            $('.detalle').find('input[name="paterno"]').val(data.detalle[0].paterno);
+            $('.detalle').find('input[name="materno"]').val(data.detalle[0].materno);
+
+            if (data.detalle[0].fecha_deceso != null) {
+                let fecha = data.detalle[0].fecha_deceso;
+                let fsplit = fecha.split(' ');
+                let fformat = fsplit[0];
+                $('.detalle').find('input[name="fecha_deceso"]').val(fformat);
+            } else {
+                $('.detalle').find('input[name="fecha_deceso"]').val("SIN FECHA");
+            }
+
+            let obslista = $('.detalle').find('.obslista');
+            let adilista = $('.detalle').find('.adilista');
+
+            if (data.obs != null) {
+                $('.obslista').empty();
+                for (let index = 0; index < data.obs.length; index++) {
+                    const element = data.obs[index].observacion;
+                    obslista.append(`<li>${element}</li>`);
+                }
+            }
+
+            if (data.ads != null) {
+                $('.adilista').empty();
+                for (let index = 0; index < data.ads.length; index++) {
+                    const element = data.ads[index].adicional;
+                    adilista.append(`<li>${element}</li>`);
+                }
+            }
+
+            let imgdeta = data.detalle[0].imagen;
+            let imagen_uri = "{{ asset('imagen/{img}') }}";
+            imagen_uri = imagen_uri.replace('{img}', imgdeta);
+            if (data.detalle[0].imagen == '') {
+                $('.detalle').find("#imgdetalle").attr("src", `${imgdefault}`);
+            } else {
+                $('.detalle').find("#imgdetalle").attr("src", `${imagen_uri}`);
+            }
+            $('.detalle').modal('show');
+        }, 'json');
+    });
 </script>
+
 @endsection

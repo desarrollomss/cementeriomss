@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Models\Registros;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -88,16 +89,8 @@ class MausoleosController extends Controller
 
     public function store(Request $request)
     {
-        $arreglo[] = array();
-
-        for ($i=0; $i < 17332; $i++) {
-            $codigo = random_bytes(5);
-            $codcasteado = bin2hex($codigo);
-            array_push($arreglo,$codcasteado);
-        }
-
-        dd($arreglo);
-
+        $codigo = random_bytes(5);
+        $codcasteado = bin2hex($codigo);
 
         $msn = "Registro Guardado Correctamente!";
 
@@ -183,7 +176,9 @@ class MausoleosController extends Controller
     public function edit($id)
     {
         $registro = Registros::find($id);
+
         $niveles = DB::table('c_niveles')->get();
+
         $ubicacion = DB::table('c_ubicaciones')->where('codigo', 'like', 'M-%')->select('id', 'codigo', 'descripcion')->orderBy('descripcion', 'asc')->get();
 
         $obsreg = DB::table('observaciones_registros')->where('observaciones_registros.registros_id', $id)->pluck('observaciones_registros.observaciones_id', 'observaciones_registros.observaciones_id')->all();
@@ -193,7 +188,7 @@ class MausoleosController extends Controller
         $adsreg = DB::table('adicionales_registros')->where('adicionales_registros.registros_id', $id)->pluck('adicionales_registros.adicionales_id', 'adicionales_registros.adicionales_id')->all();
 
         $adicionales = DB::table('c_adicionales')->get();
-        return view('tumbas.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
+        return view('mausoleos.editar', compact('adsreg', 'obsreg', 'observaciones', 'registro', 'niveles', 'ubicacion', 'adicionales'));
     }
 
     public function update(Request $request, $id)
@@ -244,7 +239,7 @@ class MausoleosController extends Controller
 
         $registro->save();
 
-        return redirect()->route('tumbas.index')->with('success', $msn);
+        return redirect()->route('mausoleos.index')->with('success', $msn);
     }
 
     public function detalleeliminar(Request $request)

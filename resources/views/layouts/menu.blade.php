@@ -27,8 +27,8 @@
     </li>
 @endcan
 @can('ver-registers')
-<li class="side-menus {{ Request::is('home') ? 'active' : '' }}">
-    <a class="nav-link" href="{{url('/home')}}">
+<li class="side-menus {{ Request::is('cementerio/registros/cuarteles') ? 'active' : '' }}">
+    <a class="nav-link" href="{{route('cuarteles.index')}}">
         <i class="fas fa-hospital-alt"></i><span>Cuarteles</span>
     </a>
 </li>
