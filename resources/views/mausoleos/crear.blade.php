@@ -51,13 +51,13 @@
                             @csrf
                             <input type="hidden" value="2" name="tiporegistro">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                <div class="col-xs-12 col-sm-12 col-md-5">
                                     <div class="form-group">
                                         <label for="ubicacion">Ubicación</label>
                                         <select class="form-control" name="ubicacion" id="ubicacion" required>
                                             <option selected value="0" disabled>Seleccionar</option>
-                                            @foreach ($ubicacion as $item)
-                                            <option value="{{$item->id}}">{{$item->descripcion}}</option>
+                                            @foreach ($ubicacion as $ubic)
+                                            <option value="{{$ubic->id}}">{{$ubic->descripcion}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -67,19 +67,19 @@
                                         <label for="nivel">Nivel</label>
                                         <select class="form-control" name="nivel" id="nivel" required>
                                             <option selected value="0" disabled>Seleccionar</option>
-                                            @foreach ($niveles as $item)
-                                            <option value="{{$item->id}}">{{$item->descripcion}}</option>
+                                            @foreach ($niveles as $nivel)
+                                            <option value="{{$nivel->id}}">{{$nivel->descripcion}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-3">
+                                <div class="col-xs-12 col-sm-12 col-md-2">
                                     <div class="form-group">
                                         <label for="nro">Nro</label>
                                         <input type="number" required id="nro" name="numero" placeholder="Nro" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-4">
+                                <div class="col-xs-12 col-sm-12 col-md-3">
                                     <div class="form-group">
                                         <label for="nombres">Nombres</label>
                                         <input type="text" required id="nombres" name="nombres" placeholder="Nombres" class="form-control" onkeyup="mayus(this);">
@@ -151,7 +151,7 @@
                                     <button type="submit" class="btn btn-success my-2 btn-block">Guardar</button>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-2 d-flex justify-content-end">
-                                    <a href="{{route('tumbas.index')}}" class="btn btn-danger my-2 btn-block" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
+                                    <a href="{{route('mausoleos.index')}}" class="btn btn-danger my-2 btn-block" style="padding-bottom: -40px;"><i class="fas fa-undo-alt"></i> Volver</a>
                                 </div>
                             </div>
                         </form>

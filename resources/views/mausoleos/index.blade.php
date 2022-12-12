@@ -30,7 +30,6 @@
                                 <th style="color: #fff">Nombres</th>
                                 <th style="color: #fff">A.Paterno</th>
                                 <th style="color: #fff">A.Materno</th>
-                                <th style="color: #fff">Codigo</th>
                                 <th style="color: #fff">Nivel</th>
                                 <th style="color: #fff">Nro</th>
                                 <th style="color: #fff">Ubicación</th>
@@ -91,10 +90,10 @@
             autoWidth: false,
             processing: true,
             info: true,
-            "pageLength": 100,
+            "pageLength": 200,
             "aLengthMenu": [
-                [100, 150, 250, 300, 350, -1],
-                [100, 150, 250, 300, 350, "Todos"]
+                [200, 300, 400, 500, 1000, -1],
+                [200, 300, 400, 500, 1000, "Todos"]
             ],
             "ajax": "{{route('obtener.mausoleos')}}",
             "columns": [{
@@ -105,9 +104,6 @@
                 },
                 {
                     data: 'materno'
-                },
-                {
-                    data: 'codigo'
                 },
                 {
                     data: 'nivel'
@@ -135,11 +131,11 @@
             "language": {
                 "lengthMenu": "Mostrar " +
                     `<select class="custom-select custom-select-sm form-control form-control-sm">
-                            <option value='100'>100</option>
-                            <option value='150'>150</option>
                             <option value='200'>200</option>
-                            <option value='250'>250</option>
                             <option value='300'>300</option>
+                            <option value='400'>400</option>
+                            <option value='500'>500</option>
+                            <option value='1000'>1000</option>
                             <option value='-1'>Todos</option>
                         </select>` +
                     " registros por página",
