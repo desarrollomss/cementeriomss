@@ -60,7 +60,7 @@ class TumbasController extends Controller
             ->addColumn('editar', function ($row) {
                 if (auth()->user()->can('editar-registers')) {
                     return '<td>
-                            <a href="/cementerio/registros/' . $row->id . '/edit/tumbas" class="btn btn-info btn-sm"><i
+                            <a href="/cementerio-app/cementerio/registros/' . $row->id . '/edit/tumbas" class="btn btn-info btn-sm"><i
                                 class="fas fa-user-edit"></i></a>
                             </td>';
                 }
