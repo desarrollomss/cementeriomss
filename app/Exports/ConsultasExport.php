@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class TumbasConsultaExport implements FromCollection,WithHeadings
+class ConsultasExport implements FromCollection,WithHeadings
 {
     use Exportable;
 
@@ -43,7 +43,7 @@ class TumbasConsultaExport implements FromCollection,WithHeadings
         ->join('c_observaciones as co','co.id','=','or.observaciones_id')
         ->join('adicionales_registros as ar','ar.registros_id','=','registros.id')
         ->join('c_adicionales as ca','ca.id','=','ar.adicionales_id')
-        ->where('cu.codigo','like','T-%')
+        // ->where('cu.codigo','like','T-%')
         ->whereNull('registros.deleted_at')
         ->where('co.id','=',$id)
         ->select('cu.codigo as codigo','cn.descripcion as nivel', 'cu.descripcion as ubicación', 'registros.numero' ,'registros.nombres' ,'registros.paterno' ,'registros.materno' ,'registros.fecha_deceso','co.descripcion as observaciones','ca.descripcion as adicionales')
