@@ -49,7 +49,7 @@
                         @endif
                         <form action="{{route('cuarteles.store')}}" method="post" class="form-horizontal" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" value="2" name="tiporegistro">
+                            <input type="hidden" value="1" name="tiporegistro">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-5">
                                     <div class="form-group">
