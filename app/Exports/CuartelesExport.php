@@ -2,44 +2,46 @@
 
 namespace App\Exports;
 
-use App\Models\Cuarteles;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use App\Models\Tumbas;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use stdClass;
 
-use Illuminate\Support\Str;
-
-class CuartelesExport implements FromQuery,WithHeadings
+class CuartelesExport implements FromCollection,WithHeadings
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-
     use Exportable;
-
-    private $busqueda;
-
-    public function exportarBusqueda($busqueda)
-    {
-        $this->busqueda = $busqueda;       
-        return $this; 
-    }
 
     public function headings(): array
     {
         return [
-            'UBICACIÓN',
             'NIVEL',
+            'UBICACIÓN',
             'NUMERO',
             'NOMBRES',
             'APELLIDO PATERNO',
             'APELLIDO MATERNO',
             'FECHA DE DECESO',
             'OBSERVACIONES',
+            'ADICIONALES'
         ];
     }
-    public function query()
+    public function collection()
     {
-         return Cuarteles::query()->select('ubicacion','nivel','numero','nombres','ap_paterno','ap_materno','fecha_deceso','obs');
+        $query = DB::table('registros')
+        ->join('c_niveles as cn','cn.id','=','registros.id_nivel')
+        ->join('c_ubicaciones as cu','cu.id','=','registros.id_ubicacion')
+        ->join('observaciones_registros as or','or.registros_id','=','registros.id')
+        ->join('c_observaciones as co','co.id','=','or.observaciones_id')
+        ->join('adicionales_registros as ar','ar.registros_id','=','registros.id')
+        ->join('c_adicionales as ca','ca.id','=','ar.adicionales_id')
+        ->where('cu.codigo','like','C-%')
+        ->whereNull('registros.deleted_at')
+        ->select('cn.descripcion as nivel', 'cu.descripcion as ubicación', 'registros.numero' ,'registros.nombres' ,'registros.paterno' ,'registros.materno' ,'registros.fecha_deceso','co.descripcion as observaciones','ca.descripcion as adicionales')
+        ->orderBy('registros.id', 'asc')
+        ->get();
+
+        return collect($query);
     }
 }

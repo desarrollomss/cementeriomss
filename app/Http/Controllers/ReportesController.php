@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Exports\RegistrosPorAnio;
 use App\Exports\TumbasExport;
 use App\Exports\TumbasConsultaExport;
+use App\Exports\MausoleosExport;
+use App\Exports\MausoleosConsultaExport;
+use App\Exports\CuartelesExport;
+use App\Exports\CuartelesConsultaExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,16 +56,15 @@ class ReportesController extends Controller
         }
         elseif($tipoRegistro == "2")
         {
-            $msn = "Exportar Mausoleos";
-            return back()->with('success',$msn);
+            return Excel::download(new MausoleosExport(), 'mausoleos.xls');
         }
         elseif($tipoRegistro == "3"){
-            $msn = "Exportar Cuarteles";
-            return back()->with('success',$msn);
+            return Excel::download(new CuartelesExport(), 'cuarteles.xls');
         }
     }
     public function registrosexportarconsulta($id)
     {
+        //cambiar la consulta de tipo general.
         return Excel::download(new TumbasConsultaExport($id), 'filtro_tumbas.xls');
     }
 
